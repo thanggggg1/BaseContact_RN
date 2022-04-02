@@ -3,16 +3,16 @@ import {memo} from 'react';
 
 import {FlatList, View} from 'react-native';
 import styled from "styled-components/native";
-import {IC_INFOICON, IC_LINE, IC_SMALLCALL} from "../assets";
+import {IC_INFO_ICON, IC_LINE, IC_SMALL_CALL} from "../assets";
 import 'react-native-gesture-handler';
 
 const Item = ({name, phone, status}) => (
     <SectionList>
         <ItemList>
-            <View style={{flexDirection: "row"}}>
+            <InfoPart >
                 <CallIcon>
                     <CallIconImage
-                        source={IC_SMALLCALL}
+                        source={IC_SMALL_CALL}
                     />
                 </CallIcon>
                 <TextItem>
@@ -23,17 +23,17 @@ const Item = ({name, phone, status}) => (
                         {phone}
                     </PhoneItem>
                 </TextItem>
-            </View>
-            <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center"}}>
+            </InfoPart>
+            <StatusPart>
                 <StatusItem>
                     <TextStatusItem>
                         {status}
                     </TextStatusItem>
                 </StatusItem>
                 <InfoIcon>
-                    <InfoIconImage source={IC_INFOICON}/>
+                    <InfoIconImage source={IC_INFO_ICON}/>
                 </InfoIcon>
-            </View>
+            </StatusPart>
         </ItemList>
     </SectionList>
 )
@@ -65,6 +65,14 @@ const ContentContainer = styled.View`
 `
 const SectionList = styled.View`
   margin-top: 20px;
+`
+const InfoPart = styled.View`
+ flex-direction: row;
+`
+const StatusPart = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 `
 const ItemList = styled.View`
   flex-direction: row;

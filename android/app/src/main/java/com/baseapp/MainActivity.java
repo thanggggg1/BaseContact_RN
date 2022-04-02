@@ -1,7 +1,6 @@
 package com.baseapp;
 import android.os.Bundle; // here
 import org.devio.rn.splashscreen.SplashScreen; // here
-import org.devio.rn.splashscreen.SplashScreen;
 
 import com.facebook.react.ReactActivity;
 

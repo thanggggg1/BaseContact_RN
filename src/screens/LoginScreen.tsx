@@ -57,6 +57,7 @@ const Container = styled.View`
   flex: 1;
   background-color: #fff;
 `;
+
 const Section1 = styled.View`
   justify-content: center;
   align-items: center;

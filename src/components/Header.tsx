@@ -13,8 +13,7 @@ export const HeaderBase = memo(function HeaderBase(){
     return (
     <Container>
     <ContentContainer>
-            <BtnMenu onPress={() => {navigation.openDrawer()
-                }}>
+            <BtnMenu onPress={() => {navigation.openDrawer()}}>
                 <MenuIcon source={IC_MENU} />
             </BtnMenu>
             <TextContact>

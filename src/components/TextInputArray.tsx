@@ -2,7 +2,7 @@ import * as React from 'react';
 import {memo, useCallback} from 'react';
 import {TextInputProps, View} from "react-native";
 import styled from "styled-components/native";
-import {IC_ADDGREENBUTTON, IC_LINE} from "../assets";
+import {IC_ADD_GREEN_BUTTON, IC_LINE} from "../assets";
 interface CustomInputProps extends TextInputProps {
     title:string,
     keyName: string,
@@ -27,9 +27,9 @@ export const InputInfoArr = memo((props: CustomInputProps) => {
     },[data])
     const onDelete = useCallback( (keyName:string,index:number) => {
         setParams(prev => {
-            let removedata=[...prev[keyName]]
-            removedata.splice(index,1)
-            return {...prev,[keyName]:removedata}
+            let removeData=[...prev[keyName]]
+            removeData.splice(index,1)
+            return {...prev,[keyName]:removeData}
         })
     },[])
     return (
@@ -59,7 +59,7 @@ export const InputInfoArr = memo((props: CustomInputProps) => {
             })}
             <ItemAdd>
                 <ItemButtonAdd onPress={()=>{onAddInput(keyName)}}>
-                    <ImageAddButton source={IC_ADDGREENBUTTON}/>
+                    <ImageAddButton source={IC_ADD_GREEN_BUTTON}/>
                 </ItemButtonAdd>
                 <AddItem>
                     <TextAddInfo>

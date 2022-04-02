@@ -2,14 +2,14 @@ import * as React from 'react';
 import {memo, useCallback} from 'react';
 import styled from "styled-components/native";
 import {
-    IC_ARROWBACKBUTTON,
+    IC_ARROW_BACK_BUTTON,
     IC_CALLBUTTON,
     IC_EMAIL,
     IC_FACETIME,
     IC_LINEDOWN,
-    IC_MESSAGEBUTTON,
+    IC_MESSAGE_BUTTON,
     IC_PROFILE,
-    IC_UPDATEAVATAR,
+    IC_UPDATE_AVATAR,
 } from "../assets";
 import {removeContactAction, useContacts} from "../store/redux";
 import call from 'react-native-phone-call'
@@ -30,8 +30,8 @@ export const ContactDetails = memo(function AddedContact() {
             [
                 {
                     text: "Yes",
-                    onPress: () => {
-                        removeContactAction(newContact?.key)
+                    onPress: async () => {
+                      await removeContactAction(newContact?.key)
                         navigation.navigate('ContactScreen')
                     },
                 },
@@ -41,19 +41,18 @@ export const ContactDetails = memo(function AddedContact() {
             ]
         );
     },[])
-
     const onSendSMSMessage = useCallback(async (phoneNumber, message) => {
         const separator = Platform.OS === 'ios' ? '&' : '?'
         const url = `sms:${phoneNumber}${separator}body=${message}`
         await Linking.openURL(url)
     }, [])
     const triggerCall = () => {
-        if (newContact.length != 10) {
+        if (newContact.phone[newContact.phone.length-1].length != 10) {
             alert('Please insert correct contact number');
             return;
         }
         const args = {
-            number: newContact.phone,
+            number: newContact.phone[newContact.phone.length-1],
             prompt: true,
         };
         call(args).catch(console.error);
@@ -66,7 +65,7 @@ export const ContactDetails = memo(function AddedContact() {
                     <Background/>
                     <BtnHeader paddingTop={getStatusBarHeight()  -(Platform.OS == "ios" ?10 :20)}>
                         <ButtonArrowBack onPress={() => navigation.navigate("ContactScreen")}>
-                            <ImageArrowBack source={IC_ARROWBACKBUTTON}/>
+                            <ImageArrowBack source={IC_ARROW_BACK_BUTTON}/>
                         </ButtonArrowBack>
                         <TouchableOpacity
                             onPress={() => navigation.navigate("New Edit Profile", {paramKey: newContact.key})}>
@@ -80,7 +79,7 @@ export const ContactDetails = memo(function AddedContact() {
                     <Information>
                         <PictureAvatar>
                             <ImageUser source={newContact?.avatar == "" ? IC_PROFILE : {uri: newContact?.avatar}}/>
-                            <UpdateAvatar source={IC_UPDATEAVATAR}/>
+                            <UpdateAvatar source={IC_UPDATE_AVATAR}/>
                         </PictureAvatar>
                         <TextName>{newContact?.firstname} {newContact?.value}</TextName>
                         <TextJob>UI/UX Design</TextJob>
@@ -99,7 +98,7 @@ export const ContactDetails = memo(function AddedContact() {
                                 onSendSMSMessage(newContact?.phone, `xin chao ${newContact?.firstname} ${newContact?.value}`)
                             }
                             }>
-                                <ImageButtonAction source={IC_MESSAGEBUTTON}/>
+                                <ImageButtonAction source={IC_MESSAGE_BUTTON}/>
                             </BackgroundButtonAction>
                             <TextButtonAction>
                                 Nhắn tin
@@ -114,14 +113,9 @@ export const ContactDetails = memo(function AddedContact() {
                             </TextButtonAction>
                         </ButtonAction>
                         <ButtonAction>
-                            <BackgroundButtonAction style={{
-                                backgroundColor: "#fff",
-                                borderStyle: "solid",
-                                borderColor: '#bdbdbd',
-                                borderWidth: 0.5
-                            }}>
+                            <BackgroundNonTouchAction>
                                 <ImageButtonAction source={IC_EMAIL}/>
-                            </BackgroundButtonAction>
+                            </BackgroundNonTouchAction>
                             <TextButtonAction>
                                 Gửi mail
                             </TextButtonAction>
@@ -129,7 +123,6 @@ export const ContactDetails = memo(function AddedContact() {
                     </ListButtonAction>
                 </WrappedInformation>
             </SectionProfile>
-
             <SectionInformation>
                 <TextOptions>
                     Điện thoại
@@ -138,25 +131,24 @@ export const ContactDetails = memo(function AddedContact() {
                     {newContact?.phone}
                 </PhoneInformation>
                 <ImageLine source={IC_LINEDOWN}/>
-                <TextOptions style={{paddingTop: 15, paddingBottom: 30}}>
+                <TextNote>
                     Ghi chú
-                </TextOptions>
+                </TextNote>
                 <ImageLine source={IC_LINEDOWN}/>
                 <TextOptions style={{paddingTop: 15}}>
                     Gửi tin nhắn
                 </TextOptions>
                 <ImageLine source={IC_LINEDOWN}/>
                 <TouchableOpacity onPress={onDelete}>
-                    <TextOptions style={{paddingTop: 15, color: '#FF4A4A'}}>
+                    <TextDelete>
                         Xóa người gọi
-                    </TextOptions>
+                    </TextDelete>
                 </TouchableOpacity>
                 <ImageLine source={IC_LINEDOWN}/>
             </SectionInformation>
         </Container>
     )
 })
-
 const Container = styled.View`
   flex: 1;
   background-color: #ffffff;
@@ -256,6 +248,12 @@ const BackgroundButtonAction = styled.TouchableOpacity`
   justify-content: center;
   border-radius: 25px;
 `
+const BackgroundNonTouchAction =styled(BackgroundButtonAction)`
+  background-color: #ffffff;
+  border-style: solid;
+  border-color: #bdbdbd;
+  border-width: 0.5px
+`
 const ImageButtonAction = styled.Image`
 
 `
@@ -272,6 +270,14 @@ const TextOptions = styled.Text`
   letter-spacing: -0.41px;
   color: #333333;
   padding-bottom: 5px;
+`
+const TextNote = styled(TextOptions)`
+  padding-top: 15px;
+  padding-bottom:30px
+`
+const TextDelete = styled(TextOptions)`
+  padding-top: 15px;
+  color: #FF4A4A;
 `
 const PhoneInformation = styled.Text`
   font-weight: 400;

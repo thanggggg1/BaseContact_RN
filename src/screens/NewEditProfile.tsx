@@ -1,7 +1,7 @@
 import * as React from 'react';
-import {memo, useCallback, useEffect, useState} from 'react';
+import {memo, useCallback, useEffect, useMemo, useState} from 'react';
 import styled from "styled-components/native";
-import {IC_BACKGROUNDCIRCLE, IC_PROFILE, IC_UPDATEAVATAR,} from "../assets";
+import {IC_BACKGROUNDCIRCLE, IC_PROFILE, IC_UPDATE_AVATAR,} from "../assets";
 import {Dimensions, ScrollView, TouchableOpacity} from "react-native";
 import * as ImagePicker from 'react-native-image-picker';
 import {updateContactAction, useContacts} from "../store/redux";
@@ -60,7 +60,16 @@ export const NewEditProfile = memo(function NewEditProfile() {
             [keyName]: val
         }))
     }, [])
-
+    const ProfilePictureStyle = useMemo(() => {
+        return profileUri || route.params?.paramKey != 0 ? {
+            width: 100,
+            height: 100,
+            marginTop: -8
+        } : null
+    },[profileUri || route.params?.paramKey])
+    const UpdateAvatarStyle = useMemo(()=>{
+        return profileUri ? {top: -30} : null
+    },[profileUri])
     return (
         <Container>
             <Header>
@@ -84,14 +93,10 @@ export const NewEditProfile = memo(function NewEditProfile() {
                     <BackgroundProfile source={IC_BACKGROUNDCIRCLE}/>
                     <ProfilePicture
                         source={itemEditContact?.avatar ? {uri: itemEditContact.avatar} : (profileUri ? {uri: profileUri} : IC_PROFILE)}
-                        style={profileUri || route.params?.paramKey != 0 ? {
-                            width: 100,
-                            height: 100,
-                            marginTop: -8
-                        } : null}/>
+                        style={ProfilePictureStyle}/>
                     <TouchableOpacity onPress={onButtonPress}>
-                        <UpdateAvatar source={IC_UPDATEAVATAR}
-                                      style={profileUri ? {top: -30} : null}/>
+                        <UpdateAvatar source={IC_UPDATE_AVATAR}
+                                      style={UpdateAvatarStyle}/>
                     </TouchableOpacity>
                 </SectionProfile>
                 <SectionList>

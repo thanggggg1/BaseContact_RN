@@ -1,10 +1,10 @@
 import * as React from 'react';
-import {memo, useState} from 'react';
-import {TouchableOpacity, View, Text, Dimensions, ScrollView, KeyboardAvoidingView, Platform} from 'react-native';
+import {memo, useMemo, useState} from 'react';
+import {KeyboardAvoidingView, Platform, TouchableOpacity, View} from 'react-native';
 import styled from "styled-components/native";
-import {IC_LINE, IC_PROFILE, IC_SEARCH} from "../assets";
+import {IC_PROFILE, IC_SEARCH} from "../assets";
 import {useContacts} from "../store/redux";
-import {useNavigation, useRoute} from "@react-navigation/native";
+import {useNavigation} from "@react-navigation/native";
 import {AlphabetList} from "react-native-section-alphabet-list";
 import FastImage from 'react-native-fast-image'
 import {useDrawerStatus} from "@react-navigation/drawer";
@@ -18,30 +18,46 @@ export const ContactScreen = memo(function Contact() {
     const [search, setSearch] = useState('')
     const [filteredList, setFilteredList] = useState([])
     const searchFilter = (str) => {
-        const text=nonAccentVietnamese(str)
-        if(text) {
-            const newData:RawContact[] = Object.values(newContact.byKey)
+        const text = nonAccentVietnamese(str)
+        if (text) {
+            const newData: RawContact[] = Object.values(newContact.byKey)
             const Data = newData.filter(item => {
                 return item.searchField.includes(text)
             })
             setFilteredList(Data)
             setSearch(str)
-        }
-        else {
+        } else {
             setFilteredList(Object.values(newContact.byKey));
             setSearch(str)
         }
     }
+    const indexLetterStyle = useMemo(() => {
+        return isDrawer === "closed" ? {
+            color: '#f2a54a',
+            fontSize: 12,
+            letterSpacing: 5,
+        } : {
+            color: '#C4C4C4',
+            fontSize: 12,
+            letterSpacing: 5,
+        }
+    }, [isDrawer])
+    const indexContainerStyle = () => {
+        return {
+            marginRight: 10
+        }
+    }
     return (
-        <KeyboardAvoidingView style={{flex: 1}} behavior={Platform.OS == "ios" ? 'padding': null} keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}>
+        <KeyboardAvoidingView style={{flex: 1}}
+                              behavior={Platform.OS == "ios" ? 'padding' : null}
+                              keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}>
             <Container>
                 <SearchWrap>
                     <SearchIcon source={IC_SEARCH}/>
                     <SearchBar
                         placeholder="Tìm kiếm danh bạ"
                         placeholderTextColor="#444"
-                        onChangeText={text => {searchFilter(text)}
-                        }
+                        onChangeText={searchFilter}
                         value={search}
                     />
                 </SearchWrap>
@@ -49,30 +65,18 @@ export const ContactScreen = memo(function Contact() {
                     <View>
                         <AlphabetList
                             data={search ? filteredList : Object.values(newContact.byKey)}
-                            indexContainerStyle={{
-                                marginRight: 10,
-                            }}
-                            indexLetterStyle={isDrawer == "closed" ? {
-                                color: '#f2a54a',
-                                fontSize: 12,
-                                fontWeight: "400",
-                                letterSpacing: 5,
-                            } : {
-                                color: '#C4C4C4',
-                                fontSize: 12,
-                                fontWeight: "400",
-                                letterSpacing: 5,
-                            }}
+                            indexContainerStyle={indexContainerStyle()}
+                            indexLetterStyle={indexLetterStyle}
                             renderCustomItem={(item: any) => (
                                 <TouchableOpacity
                                     onPress={() => navigation.navigate("ContactDetails", {paramKey: item.key})}
                                 >
                                     <ItemList>
                                         <AvatarItem source={item.avatar == "" ? IC_PROFILE : {uri: item.avatar}}
-                                                    style={{resizeMode: 'cover'}}/>
+                                        />
                                         <TextItem>
                                             <NameItem>{item.firstname} {item.value} </NameItem>
-                                            <PhoneItem>{item.phone[item.phone.length-1]}</PhoneItem>
+                                            <PhoneItem>{item.phone[item.phone.length - 1]}</PhoneItem>
                                         </TextItem>
                                     </ItemList>
                                 </TouchableOpacity>
@@ -90,7 +94,6 @@ export const ContactScreen = memo(function Contact() {
         </KeyboardAvoidingView>
     )
 })
-const width = Dimensions.get("window").width
 
 const Container = styled.View`
   flex: 1;
@@ -132,7 +135,7 @@ const ItemList = styled.View`
   margin-bottom: -5px;
   margin-top: 5px;
   border-bottom-width: 1px;
-  border-bottom-color: rgba(0,0,0,0.1);
+  border-bottom-color: rgba(0, 0, 0, 0.1);
 `
 const TextItem = styled.View`
   padding-left: 20px;

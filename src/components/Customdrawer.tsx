@@ -1,62 +1,30 @@
 import * as React from 'react';
-import {useState} from 'react';
-import {Platform, StatusBar, View} from 'react-native';
+import {useCallback, useState} from 'react';
+import {View} from 'react-native';
 import {DrawerContentScrollView,} from '@react-navigation/drawer';
 import styled from "styled-components/native";
-import {IC_ADDPLUS, IC_CONTACT, IC_DOWNARROW, IMG_PROFILE_AVATAR} from "../assets";
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-
+import {IC_ADDPLUS, IC_DOWNARROW, IMG_PROFILE_AVATAR} from "../assets";
+import {ItemDropDown} from "./ItemDropDown";
+import {statusBarHeight} from "../utils/styles";
 
 const CustomDrawer = props => {
     const [isActive, setIsActive] = useState(false);
-    const insets = useSafeAreaInsets();
-    const ButtonHandler = () => {
-        setIsActive(current => !current)
-    };
+    const ButtonHandler =useCallback(()=>{
+        setIsActive(!isActive)
+    },[isActive])
     const DropdownItem = () => {
-        return (<View>
-                <ItemDropdown>
-                    <ButtonContact>
-                        <ImageContact source={IC_CONTACT}/>
-                    </ButtonContact>
-                    <TextContact>All</TextContact>
-                </ItemDropdown>
-                <ItemDropdown>
-                    <ButtonContact>
-                        <ImageContact source={IC_CONTACT}/>
-                    </ButtonContact>
-                    <TextContact>General</TextContact>
-                </ItemDropdown>
-                <ItemDropdown>
-                    <ButtonContact>
-                        <ImageContact source={IC_CONTACT}/>
-                    </ButtonContact>
-                    <TextContact>Investor</TextContact>
-                </ItemDropdown>
-                <ItemDropdown>
-                    <ButtonContact>
-                        <ImageContact source={IC_CONTACT}/>
-                    </ButtonContact>
-
-                    <TextContact>Lead</TextContact>
-                </ItemDropdown>
-                <ItemDropdown>
-                    <ButtonContact>
-                        <ImageContact source={IC_CONTACT}/>
-                    </ButtonContact>
-
-                    <TextContact>Vip</TextContact>
-                </ItemDropdown>
+        return (
+            <View>
+                <ItemDropDown title={'All'}/>
+                <ItemDropDown title={'General'}/>
+                <ItemDropDown title={'Investors'}/>
+                <ItemDropDown title={'Lead'}/>
+                <ItemDropDown title={'VIP'}/>
             </View>
         )
     }
     return (
-        <>
-            <View style={{
-                backgroundColor: '#f2a54a',
-                height: Platform.OS == "ios" ? insets.top : StatusBar.currentHeight
-            }}/>
-            <View style={{flex: 1}}>
+            <Container>
                 <HeaderDrawer>
                     <SectionProfile>
                         <AvatarProfile>
@@ -88,26 +56,25 @@ const CustomDrawer = props => {
                             Edit
                         </TextEdit>
                     </CollectionsButton>
-                    {isActive ? <DropdownItem></DropdownItem> : null}
+                    {isActive ? <DropdownItem/> : null}
                 </FlexComponent>
                 <DrawerContentScrollView
                     {...props}>
                 </DrawerContentScrollView>
-            </View>
-        </>
-
+            </Container>
     );
 };
-
 export default CustomDrawer;
+const Container = styled.View`
+flex:1;
+`
 const FlexComponent = styled.View`
-  background-color: '#fff';
+  background-color: #fff;
   flex: 1;
 `
-
 const HeaderDrawer = styled.View`
   background-color: #F2A54A;
-  height: 90px;
+  padding: ${statusBarHeight}px 0 10px 0;
 `
 const SectionProfile = styled.View`
   flex-direction: row;
@@ -172,23 +139,6 @@ const TextEdit = styled.Text`
   letter-spacing: 0.12px;
   color: #F2A54A;
 `
-const ItemDropdown = styled(CollectionsButton)`
-  background: white;
-  flex-direction: row;
-  height: 44px;
-  align-items: center;
-  padding-left: 18px;
-`
-const ButtonContact = styled.TouchableOpacity`
-
-`
-const ImageContact = styled.Image`
-
-`
-const TextContact = styled.Text`
-  padding-left: 14px;
-`
-
 const ItemCollection = styled.View`
   flex-direction: row;
   padding-left: 20px;
@@ -198,7 +148,6 @@ const BackgroundButtonAdd = styled.TouchableOpacity`
   padding: 20px 0;
   padding-right: 20px;
 `
-
 const ImageButtonAdd = styled.Image`
   width: 15px;
   height: 15px;
