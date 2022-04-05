@@ -35,6 +35,9 @@ const Item = ({name, phone, status}) => (
                 </InfoIcon>
             </StatusPart>
         </ItemList>
+        <View>
+            <LineIconImage source={IC_LINE}/>
+        </View>
     </SectionList>
 )
 export const HistoryScreen = memo(function History() {
@@ -60,11 +63,13 @@ export const HistoryScreen = memo(function History() {
 const Container = styled.View`
   flex: 1;
   background-color: #ffffff;
+  padding-top: 25px;
 `
 const ContentContainer = styled.View`
 `
 const SectionList = styled.View`
-  margin-top: 20px;
+    margin-bottom: 10px;
+  margin-left: 20px;
 `
 const InfoPart = styled.View`
  flex-direction: row;
@@ -73,53 +78,50 @@ const StatusPart = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  padding-right: 15px;
 `
 const ItemList = styled.View`
   flex-direction: row;
-  padding-bottom: 10px;
-  margin-left: 15px;
   justify-content: space-between;
-  border-bottom-width: 1px;
-  border-bottom-color: rgba(0,0,0,0.1);
 `
 const TextItem = styled.View`
-  padding-left: 15px;
 `
 const NameItem = styled.Text`
   font-weight: 500;
   font-size: 16px;
   letter-spacing: 0.12px;
   color: #333333;
+  padding-bottom: 10px;
 `
 const PhoneItem = styled.Text`
-  font-weight: 400;
   font-size: 14px;
-  letter-spacing: 0.12px;
-  color: #828282;
-  padding-top: 10px;
-`
-const StatusItem = styled.View`
-  padding-top: 10px;
-  padding-right: 20px;
-`
-const TextStatusItem = styled.Text`
-  font-weight: 400;
-  font-size: 13px;
-  line-height: 16px;
-  text-align: right;
   letter-spacing: 0.12px;
   color: #828282;
   padding-bottom: 10px;
 `
-const CallIcon = styled.TouchableOpacity`
+const StatusItem = styled.View`
 
+`
+const TextStatusItem = styled.Text`
+  font-size: 13px;
+  text-align: right;
+  letter-spacing: 0.12px;
+  color: #828282;
+  padding-right: 20px;
+`
+const CallIcon = styled.TouchableOpacity`
+padding-right: 15px;
 `
 const CallIconImage = styled.Image`
   width: 20px;
   height: 20px;
 `
+const LineIconImage = styled.Image`
+height: 2px;
+  width: 100%;
+  margin-left: 30px;
+`
 const InfoIcon = styled.TouchableOpacity`
-  padding-right: 20px;
 `
 const InfoIconImage = styled.Image`
   width: 24px;

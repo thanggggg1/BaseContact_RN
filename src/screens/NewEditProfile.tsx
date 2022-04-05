@@ -17,6 +17,17 @@ export const NewEditProfile = memo(function NewEditProfile() {
     const newEditContacts = useContacts();
     const itemEditContact = newEditContacts.byKey[route.params.paramKey]
     const [profileUri, setProfileUri] = useState("");
+    const [isActive,setIsActive]= useState(false);
+    const selectionchange = useMemo(() => {
+        return {
+        color: isActive ? '#828282' : '#F2A54A'
+        }
+    },[isActive])
+    const selectiondone = useMemo( () => {
+        return{
+            color: isActive ? '#F2A54A' : '#828282'
+        }
+    },[isActive])
     const [params, setParams] = useState({
         key: `${new Date().getTime()}`,
         value: '',
@@ -29,14 +40,20 @@ export const NewEditProfile = memo(function NewEditProfile() {
         address: [],
         date: []
     })
+
     useEffect(() => {
         if (!itemEditContact) {
             return
         }
         setParams({...itemEditContact})
+        setIsActive(true)
     }, [itemEditContact])
     const SearchText = `${params.firstname}${params.value}${nonAccentVietnamese(params.firstname)}${nonAccentVietnamese(params.value)}`
     const onDone = useCallback(async () => {
+        if (params.value == "" || params.phone.includes('') || params.phone.length==0) {
+            alert('Please insert name or phone of the contact');
+            return;
+        }
         params.searchField = SearchText;
         await updateContactAction(params)
         navigation.navigate("ContactScreen")
@@ -59,6 +76,7 @@ export const NewEditProfile = memo(function NewEditProfile() {
             ...prevValue,
             [keyName]: val
         }))
+        setIsActive(true);
     }, [])
     const ProfilePictureStyle = useMemo(() => {
         return profileUri || route.params?.paramKey != 0 ? {
@@ -74,18 +92,18 @@ export const NewEditProfile = memo(function NewEditProfile() {
         <Container>
             <Header>
                 <BtnHeader>
-                    <TouchableOpacity onPress={() => {
+                    <ButtonCancel onPress={() => {
                         navigation.navigate("ContactScreen")
                     }}>
-                        <TextHeader>
+                        <TextHeader style={selectionchange}>
                             Hủy
                         </TextHeader>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={onDone}>
-                        <TextHeaderCompleted>
+                    </ButtonCancel>
+                    <ButtonDone onPress={onDone}>
+                        <TextHeaderCompleted style={selectiondone}>
                             Xong
                         </TextHeaderCompleted>
-                    </TouchableOpacity>
+                    </ButtonDone>
                 </BtnHeader>
             </Header>
             <ScrollView>
@@ -131,6 +149,7 @@ const Container = styled.View`
 `
 const Header = styled.View`
   background-color: #ffffff;
+  margin-bottom: 10px;
 `
 const BtnHeader = styled.TouchableOpacity`
   flex-direction: row;
@@ -144,6 +163,11 @@ const TextHeader = styled.Text`
   line-height: 22px;
   letter-spacing: -0.41px;
   color: #F2A54A;
+`
+const ButtonCancel = styled.TouchableOpacity`
+
+`
+const ButtonDone = styled.TouchableOpacity`
 `
 const TextHeaderCompleted = styled(TextHeader)`
   color: #828282;

@@ -26,9 +26,9 @@ export const LoginScreen = memo(function HomeScreen() {
                 <SubTitle>
                     {`Giải pháp quản lý công việc\n & dự án toàn diện cho doanh nghiệp 4.0`}
                 </SubTitle>
-                <View style={{flex:1,justifyContent: "center"}}>
+                <SmallIconField>
                     <SmallIcon source={IMG_LOGO_APP_SMALL}/>
-                </View>
+                </SmallIconField>
 
             </Section2>
             <Section3>
@@ -67,8 +67,14 @@ const Section2 = styled.View`
   align-items: center;
   flex: auto;
 `;
+const SmallIconField = styled.View`
+flex: 1;
+  justify-content: center;
+  align-items: center;
+  padding-top: 15px;
+`
 const Section3 = styled.View`
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 `;
 const LoginApp = styled.Image`
 

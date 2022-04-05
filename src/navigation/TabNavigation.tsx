@@ -1,26 +1,27 @@
 import * as React from 'react';
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-
 import {IC_CONTACT, IC_HISTORY} from "../assets";
 import styled from "styled-components/native";
-import {StyleSheet} from "react-native";
+import {Platform, StyleSheet} from "react-native";
 import {HeaderBase} from "../components/Header";
 import {ContactScreen} from "../screens/ContactScreen";
 import {HistoryScreen} from "../screens/HistoryScreen";
-
+import {useMemo} from "react";
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = ({navigation}) => {
+    const screenOptions = useMemo( () => {
+     return {
+         tabBarActiveTintColor: '#fff',
+         tabBarStyle:{backgroundColor : '#f2a54a',marginBottom : Platform.OS == 'ios' ? -10 : 0},
+         tabBarInactiveTintColor:"#DADADA",
+         tabBarItemStyle:{paddingBottom:Platform.OS== 'ios' ? 0 : 5},
+         header:props => <HeaderBase navigation = {navigation} {...props}/>}
+    },[navigation])
     return (
         <Tab.Navigator
             initialRouteName="Danh bạ"
-            screenOptions={{
-            tabBarActiveTintColor: '#fff',
-            tabBarStyle:{backgroundColor : '#f2a54a'},
-            tabBarInactiveTintColor:"#DADADA",
-                tabBarItemStyle:{paddingBottom:5},
-                header:props => <HeaderBase navigation = {navigation} {...props} />
-        }}>
+            screenOptions={screenOptions}>
             <Tab.Screen name="Danh bạ" component={ContactScreen}
                         options={{
                             tabBarIcon:({focused}) =>{
@@ -32,7 +33,6 @@ const BottomTabNavigator = ({navigation}) => {
                                     />
                                 )
                             },
-
                         }} />
             <Tab.Screen name="Gần đây" component={HistoryScreen}
                         options={{
@@ -71,5 +71,4 @@ const styles = StyleSheet.create({
         height:23,
     }
 });
-
 export default BottomTabNavigator;

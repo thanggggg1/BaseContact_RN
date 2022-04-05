@@ -2,7 +2,7 @@ import * as React from 'react';
 import {memo, useCallback} from 'react';
 import {TextInputProps, View} from "react-native";
 import styled from "styled-components/native";
-import {IC_ADD_GREEN_BUTTON, IC_LINE} from "../assets";
+import {IC_ADD_GREEN_BUTTON, IC_LINE, IC_REMOVE} from "../assets";
 interface CustomInputProps extends TextInputProps {
     title:string,
     keyName: string,
@@ -35,21 +35,21 @@ export const InputInfoArr = memo((props: CustomInputProps) => {
     return (
         <Container>
             {data.map((item,index) => {
-                console.log('item',item)
                 return (
                     <View key={index}>
                         <ItemAdd>
                             <ItemButtonAdd>
                                 <RemoveButton onPress={()=>{onDelete(keyName,index)}}>
-                                    <ImageRemoveButton source={IC_LINE}/>
+                                    <ImageRemoveButton source={IC_REMOVE}/>
                                 </RemoveButton>
                             </ItemButtonAdd>
                             <AddItem>
                                 <TextAddInfo
                                     onChangeText={(text) => onInfoChange(keyName,index,text)}
-                                    placeholderTextColor={'#333333'}
+                                    placeholderTextColor={'#BDBDBD'}
                                     autoFocus={true}
                                     value={data[index]}
+                                    placeholder={title}
                                 >
                                 </TextAddInfo>
                             </AddItem>
@@ -57,14 +57,14 @@ export const InputInfoArr = memo((props: CustomInputProps) => {
                     </View>
                 )
             })}
-            <ItemAdd>
-                <ItemButtonAdd onPress={()=>{onAddInput(keyName)}}>
+            <ItemAdd onPress={()=>{onAddInput(keyName)}}>
+                <ItemButtonAdd>
                     <ImageAddButton source={IC_ADD_GREEN_BUTTON}/>
                 </ItemButtonAdd>
                 <AddItem>
-                    <TextAddInfo>
+                    <TextInfo>
                         {title}
-                    </TextAddInfo>
+                    </TextInfo>
                 </AddItem>
             </ItemAdd>
         </Container>
@@ -74,13 +74,13 @@ const Container = styled.View`
   flex: auto;
   background-color: #ffffff;
 `
-const ItemAdd = styled.View`
+const ItemAdd = styled.TouchableOpacity`
   padding-top: 10px;
   flex-direction: row;
 align-items: center;
   margin-top: 20px;
 `
-const ItemButtonAdd = styled.TouchableOpacity`
+const ItemButtonAdd = styled.View`
   width: 24px;
   height: 24px;
   margin-left: 15px;
@@ -110,6 +110,16 @@ const TextAddInfo = styled.TextInput`
   border-bottom-color: rgba(0, 0, 0, 0.1);
   letter-spacing: -0.41px;
   text-transform: lowercase;
+  padding-bottom: 10px;
+  padding-top: 10px;
+`
+const TextInfo =styled.Text`
+  margin-left: 15px;
+  font-size: 13px;
+  color: #333333;
+  background-color: white;
+  border-bottom-color: rgba(0, 0, 0, 0.1);
+  letter-spacing: -0.41px;
   padding-bottom: 10px;
   padding-top: 10px;
 `

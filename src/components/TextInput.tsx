@@ -5,7 +5,6 @@ import styled from "styled-components/native";
 interface CustomInputProps extends TextInputProps {
     keyName: string,
     onValueChange: (keyName: string, value: string) => void,
-
 }
 export const InputInfo = memo((props: CustomInputProps) => {
     const {keyName, onValueChange, ...remainingProps} = props;

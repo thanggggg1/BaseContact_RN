@@ -74,7 +74,7 @@ const FlexComponent = styled.View`
 `
 const HeaderDrawer = styled.View`
   background-color: #F2A54A;
-  padding: ${statusBarHeight}px 0 10px 0;
+  padding: ${statusBarHeight-15}px 0 10px 0;
 `
 const SectionProfile = styled.View`
   flex-direction: row;

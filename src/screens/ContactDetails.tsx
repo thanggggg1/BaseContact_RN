@@ -9,11 +9,10 @@ import {
     IC_LINEDOWN,
     IC_MESSAGE_BUTTON,
     IC_PROFILE,
-    IC_UPDATE_AVATAR,
 } from "../assets";
 import {removeContactAction, useContacts} from "../store/redux";
 import call from 'react-native-phone-call'
-import {Alert, Linking, Platform, TouchableOpacity} from "react-native";
+import {Alert, Linking, Platform, TouchableOpacity, View} from "react-native";
 import {useNavigation, useRoute} from "@react-navigation/native";
 import FastImage from "react-native-fast-image";
 import {getStatusBarHeight} from "react-native-iphone-x-helper";
@@ -67,19 +66,18 @@ export const ContactDetails = memo(function AddedContact() {
                         <ButtonArrowBack onPress={() => navigation.navigate("ContactScreen")}>
                             <ImageArrowBack source={IC_ARROW_BACK_BUTTON}/>
                         </ButtonArrowBack>
-                        <TouchableOpacity
+                        <ButtonEdit
                             onPress={() => navigation.navigate("New Edit Profile", {paramKey: newContact.key})}>
                             <TextHeaderCompleted>
                                 Sửa
                             </TextHeaderCompleted>
-                        </TouchableOpacity>
+                        </ButtonEdit>
                     </BtnHeader>
                 </Header>
                 <WrappedInformation>
                     <Information>
                         <PictureAvatar>
                             <ImageUser source={newContact?.avatar == "" ? IC_PROFILE : {uri: newContact?.avatar}}/>
-                            <UpdateAvatar source={IC_UPDATE_AVATAR}/>
                         </PictureAvatar>
                         <TextName>{newContact?.firstname} {newContact?.value}</TextName>
                         <TextJob>UI/UX Design</TextJob>
@@ -127,9 +125,13 @@ export const ContactDetails = memo(function AddedContact() {
                 <TextOptions>
                     Điện thoại
                 </TextOptions>
-                <PhoneInformation>
-                    {newContact?.phone}
-                </PhoneInformation>
+                {newContact?.phone.map((item,index) => {
+                    return(
+                        <View key={index}>
+                            <PhoneInformation>{item}</PhoneInformation>
+                        </View>
+                    )
+                })}
                 <ImageLine source={IC_LINEDOWN}/>
                 <TextNote>
                     Ghi chú
@@ -185,6 +187,9 @@ const ButtonArrowBack = styled.TouchableOpacity`
 
 `
 const ImageArrowBack = styled.Image`
+
+`
+const ButtonEdit=styled.TouchableOpacity`
 
 `
 const TextHeaderCompleted = styled.Text`

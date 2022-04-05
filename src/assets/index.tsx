@@ -18,6 +18,7 @@ export const IC_FACETIME = require('./icons/ic_facetimebtn.png')
 export const IC_EMAIL = require('./icons/ic_email.png')
 export const IC_LINEDOWN = require('./icons/ic_linedown.png')
 export const IC_ADDPLUS = require('./icons/ic_addplusyellow.png')
+export const IC_REMOVE = require('./icons/ic_removeline.png')
 
 
 export const IMG_LOGIN_BACKGROUND = require('./images/login_background.png')
