@@ -13,9 +13,11 @@ import {RawContact} from "../utils/type";
 
 const Item = memo((props:any)=>{
     const navigation:any=useNavigation();
+    const onPress = useCallback(()=>{
+        navigation.navigate("ContactDetails", {paramKey: props.item.key})
+    },[])
   return(
-      <TouchableOpacity
-          onPress={()=>{navigation.navigate("ContactDetails", {paramKey: props.item.key})}}>
+      <TouchableOpacity onPress={onPress}>
               <ItemList>
               <AvatarItem source={props.item.avatar == "" ? IC_PROFILE : {uri: props.item.key}}
               />

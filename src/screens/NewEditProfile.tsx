@@ -19,7 +19,7 @@ export const NewEditProfile = memo(function NewEditProfile() {
     const itemEditContact = newEditContacts.byKey[route.params.paramKey]
     const [profileUri, setProfileUri] = useState("");
     const [isActive, setIsActive] = useState(false);
-    const [isValidEmail,setIsValidEmail]=useState(false);
+    const [isValidEmail,setIsValidEmail]=useState(true);
     const selectionOnchange = useMemo(() => {
         return {
             color: isActive ? '#828282' : '#F2A54A'
@@ -43,11 +43,6 @@ export const NewEditProfile = memo(function NewEditProfile() {
         date: '',
     })
     useEffect(()=>{
-        params.email.every((item)=>{
-            if(validator.isEmail(item)) {
-                setIsValidEmail(true)
-            }
-        })
         if (params.value=='' && params.firstname=='' && params.avatar=='' && params.phone.length==0 && params.email.length==0 && params.address.length==0
         ){
             setIsActive(false)
@@ -69,6 +64,12 @@ export const NewEditProfile = memo(function NewEditProfile() {
             alert('Please insert name or phone of the contact');
             return;
         }
+        params.email.every((item)=>{
+            if(!validator.isEmail(item)) {
+                setIsValidEmail(false)
+            }
+        })
+        console.log(isValidEmail)
         if (isValidEmail || params?.email.length==0) {
             params.searchField = SearchText;
             await updateContactAction(params)

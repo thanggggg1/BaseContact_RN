@@ -4,6 +4,44 @@ import {TextInputProps, View} from "react-native";
 import styled from "styled-components/native";
 import {IC_ADD_GREEN_BUTTON, IC_REMOVE} from "../assets";
 
+interface Props{
+    keyName:string,
+    index:number,
+    onDelete:(keyName:string,index:number) => void,
+    _onInfoChange:(keyName:string, index:number, value:string) => void,
+    data:string[],
+    title:string,
+    typeKeyboard:any
+}
+const Item =memo((props:Props)=>{
+    const {keyName, index,onDelete,_onInfoChange,data,title,typeKeyboard} = props
+    const onInfoChange = useCallback((value)=>{
+        _onInfoChange(keyName, index, value)
+    },[])
+    return(
+        <ItemAdd>
+            <ItemButtonAdd>
+                <RemoveButton onPress={() => {
+                    onDelete(keyName, index)
+                }}>
+                    <ImageRemoveButton source={IC_REMOVE}/>
+                </RemoveButton>
+            </ItemButtonAdd>
+            <AddItem>
+                <TextAddInfo
+                    onChangeText={onInfoChange}
+                    placeholderTextColor={'#BDBDBD'}
+                    autoFocus={true}
+                    value={data[index]}
+                    placeholder={title}
+                    keyboardType={typeKeyboard}
+                >
+                </TextAddInfo>
+            </AddItem>
+        </ItemAdd>
+    )
+})
+
 interface CustomInputProps extends TextInputProps {
     title: string,
     keyName: string,
@@ -40,26 +78,7 @@ export const InputInfoArr = memo((props: CustomInputProps) => {
             {data.map((item, index) => {
                 return (
                     <View key={index}>
-                        <ItemAdd>
-                            <ItemButtonAdd>
-                                <RemoveButton onPress={() => {
-                                    onDelete(keyName, index)
-                                }}>
-                                    <ImageRemoveButton source={IC_REMOVE}/>
-                                </RemoveButton>
-                            </ItemButtonAdd>
-                            <AddItem>
-                                <TextAddInfo
-                                    onChangeText={(value) => onInfoChange(keyName, index, value)}
-                                    placeholderTextColor={'#BDBDBD'}
-                                    autoFocus={true}
-                                    value={data[index]}
-                                    placeholder={title}
-                                    keyboardType={typeKeyboard}
-                                >
-                                </TextAddInfo>
-                            </AddItem>
-                        </ItemAdd>
+                        <Item keyName={keyName} index={index} onDelete={onDelete} _onInfoChange={onInfoChange} data={data} title={title} typeKeyboard={typeKeyboard}/>
                     </View>
                 )
             })}
