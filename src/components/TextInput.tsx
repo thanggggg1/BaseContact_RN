@@ -2,15 +2,17 @@ import * as React from 'react';
 import {memo, useCallback} from 'react';
 import {TextInputProps} from "react-native";
 import styled from "styled-components/native";
+
 interface CustomInputProps extends TextInputProps {
     keyName: string,
     onValueChange: (keyName: string, value: string) => void,
 }
+
 export const InputInfo = memo((props: CustomInputProps) => {
     const {keyName, onValueChange, ...remainingProps} = props;
-    const onChangeText = useCallback( (value:string) => {
-            onValueChange(keyName, value)
-    },[keyName,onValueChange])
+    const onChangeText = useCallback((value: string) => {
+        onValueChange(keyName, value)
+    }, [keyName, onValueChange])
     return (
         <InputItem>
             <TextInfo

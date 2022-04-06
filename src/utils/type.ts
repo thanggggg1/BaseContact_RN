@@ -8,5 +8,5 @@ export interface RawContact {
     phone:string[],
     email:string[],
     address:string[],
-    date:string[]
+    date:any,
 }

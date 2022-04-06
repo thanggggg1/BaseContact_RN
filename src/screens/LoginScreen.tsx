@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {memo} from 'react';
-import {Dimensions, StatusBar, View} from 'react-native';
+import {memo, useCallback} from 'react';
+import {Dimensions, StatusBar} from 'react-native';
 import styled from "styled-components/native";
 import {IMG_LOGIN_BACKGROUND, IMG_LOGO_APP, IMG_LOGO_APP_SMALL} from "../assets";
 import {useNavigation} from "@react-navigation/native";
@@ -8,6 +8,9 @@ import {getStatusBarHeight} from 'react-native-iphone-x-helper'
 
 export const LoginScreen = memo(function HomeScreen() {
     const navigation: any = useNavigation();
+    const onNavigateContactScreen = useCallback(()=>{
+        navigation.navigate("ContactScreen")
+    },[navigation])
     return (
         <Container>
             <StatusBar
@@ -36,7 +39,7 @@ export const LoginScreen = memo(function HomeScreen() {
                     Bạn chưa đăng nhập
                 </TextWithoutLogin>
                 <WrapButton>
-                    <BtnLogin onPress={() => navigation.navigate("ContactScreen")}>
+                    <BtnLogin onPress={onNavigateContactScreen}>
                         <LoginText>
                             Đăng nhập bằng base account
                         </LoginText>
@@ -53,7 +56,7 @@ export const LoginScreen = memo(function HomeScreen() {
 })
 const width = Dimensions.get("window").width
 const Container = styled.View`
-  padding-top: ${getStatusBarHeight()+60}px;
+  padding-top: ${getStatusBarHeight() + 60}px;
   flex: 1;
   background-color: #fff;
 `;
@@ -68,13 +71,13 @@ const Section2 = styled.View`
   flex: auto;
 `;
 const SmallIconField = styled.View`
-flex: 1;
+  flex: 1;
   justify-content: center;
   align-items: center;
   padding-top: 15px;
 `
 const Section3 = styled.View`
-    margin-bottom: 40px;
+  margin-bottom: 50px;
 `;
 const LoginApp = styled.Image`
 
@@ -109,10 +112,10 @@ const TextWithoutLogin = styled.Text`
   text-align: center;
   letter-spacing: -0.24px;
   color: #828282;
-  padding: 20px 0px;
+  padding: 20px 0;
 `
 const WrapButton = styled.View`
-  padding: 0 20px;
+  padding: 0 40px;
 `
 const BtnLogin = styled.TouchableOpacity`
   height: 48px;
@@ -135,5 +138,4 @@ const LoginText = styled.Text`
 `
 const LoginTextManually = styled(LoginText)`
   color: #f2a54a;
-
 `

@@ -9,7 +9,7 @@ import 'react-native-gesture-handler';
 const Item = ({name, phone, status}) => (
     <SectionList>
         <ItemList>
-            <InfoPart >
+            <InfoPart>
                 <CallIcon>
                     <CallIconImage
                         source={IC_SMALL_CALL}
@@ -68,11 +68,11 @@ const Container = styled.View`
 const ContentContainer = styled.View`
 `
 const SectionList = styled.View`
-    margin-bottom: 10px;
+  margin-bottom: 10px;
   margin-left: 20px;
 `
 const InfoPart = styled.View`
- flex-direction: row;
+  flex-direction: row;
 `
 const StatusPart = styled.View`
   flex-direction: row;
@@ -110,14 +110,14 @@ const TextStatusItem = styled.Text`
   padding-right: 20px;
 `
 const CallIcon = styled.TouchableOpacity`
-padding-right: 15px;
+  padding-right: 15px;
 `
 const CallIconImage = styled.Image`
   width: 20px;
   height: 20px;
 `
 const LineIconImage = styled.Image`
-height: 2px;
+  height: 2px;
   width: 100%;
   margin-left: 30px;
 `

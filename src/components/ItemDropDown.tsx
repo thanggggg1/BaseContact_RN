@@ -2,9 +2,11 @@ import * as React from 'react';
 import {memo} from 'react';
 import styled from "styled-components/native";
 import {IC_CONTACT} from "../assets";
+
 interface Props {
     title: string
 }
+
 export const ItemDropDown = memo(function ItemDropDown(props: Props) {
     return (
         <ItemDropdown>

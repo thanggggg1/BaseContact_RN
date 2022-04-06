@@ -3,15 +3,15 @@ import {useCallback, useState} from 'react';
 import {View} from 'react-native';
 import {DrawerContentScrollView,} from '@react-navigation/drawer';
 import styled from "styled-components/native";
-import {IC_ADDPLUS, IC_DOWNARROW, IMG_PROFILE_AVATAR} from "../assets";
+import {IC_ADD_PLUS, IC_DOWN_ARROW, IMG_PROFILE_AVATAR} from "../assets";
 import {ItemDropDown} from "./ItemDropDown";
 import {statusBarHeight} from "../utils/styles";
 
 const CustomDrawer = props => {
     const [isActive, setIsActive] = useState(false);
-    const ButtonHandler =useCallback(()=>{
+    const ButtonHandler = useCallback(() => {
         setIsActive(!isActive)
-    },[isActive])
+    }, [isActive])
     const DropdownItem = () => {
         return (
             <View>
@@ -24,49 +24,50 @@ const CustomDrawer = props => {
         )
     }
     return (
-            <Container>
-                <HeaderDrawer>
-                    <SectionProfile>
-                        <AvatarProfile>
-                            <ImageProfile source={IMG_PROFILE_AVATAR}/>
-                        </AvatarProfile>
-                        <ContentProfile>
-                            <TextName>Nguyễn Tiến Nam</TextName>
-                            <TextPosition>Admin Admin</TextPosition>
-                        </ContentProfile>
-                    </SectionProfile>
-                </HeaderDrawer>
-                <FlexComponent>
-                    <ItemCollection>
-                        <BackgroundButtonAdd>
-                            <ImageButtonAdd source={IC_ADDPLUS}/>
-                        </BackgroundButtonAdd>
-                        <TextItemCollection>
-                            New collection
-                        </TextItemCollection>
-                    </ItemCollection>
-                    <CollectionsButton>
-                        <ArrowDownButton onPress={ButtonHandler}>
-                            {isActive ? <ArrowUpIcon source={IC_DOWNARROW}/> : <ArrowDownIcon source={IC_DOWNARROW}/>}
-                        </ArrowDownButton>
-                        <TextCollection>
-                            COLLECTIONS
-                        </TextCollection>
-                        <TextEdit>
-                            Edit
-                        </TextEdit>
-                    </CollectionsButton>
-                    {isActive ? <DropdownItem/> : null}
-                </FlexComponent>
-                <DrawerContentScrollView
-                    {...props}>
-                </DrawerContentScrollView>
-            </Container>
+        <Container>
+            <HeaderDrawer>
+                <SectionProfile>
+                    <AvatarProfile>
+                        <ImageProfile source={IMG_PROFILE_AVATAR}/>
+                    </AvatarProfile>
+                    <ContentProfile>
+                        <TextName>Nguyễn Tiến Nam</TextName>
+                        <TextPosition>Admin Admin</TextPosition>
+                    </ContentProfile>
+                </SectionProfile>
+            </HeaderDrawer>
+            <FlexComponent>
+                <ItemCollection>
+                    <BackgroundButtonAdd>
+                        <ImageButtonAdd source={IC_ADD_PLUS}/>
+                    </BackgroundButtonAdd>
+                    <TextItemCollection>
+                        New collection
+                    </TextItemCollection>
+                </ItemCollection>
+                <CollectionsButton onPress={ButtonHandler}>
+                    <ArrowDownButton>
+                        {isActive ? <ArrowUpIcon source={IC_DOWN_ARROW}/> : <ArrowDownIcon source={IC_DOWN_ARROW}/>}
+                    </ArrowDownButton>
+                    <TextCollection>
+                        COLLECTIONS
+                    </TextCollection>
+                    <TextEdit>
+                        Edit
+                    </TextEdit>
+                </CollectionsButton>
+                {isActive ? <DropdownItem/> : null}
+            </FlexComponent>
+            <DrawerContentScrollView
+                {...props}>
+            </DrawerContentScrollView>
+        </Container>
     );
 };
 export default CustomDrawer;
 const Container = styled.View`
-flex:1;
+  flex: 1;
+  margin-top: -10px;
 `
 const FlexComponent = styled.View`
   background-color: #fff;
@@ -74,7 +75,7 @@ const FlexComponent = styled.View`
 `
 const HeaderDrawer = styled.View`
   background-color: #F2A54A;
-  padding: ${statusBarHeight-15}px 0 10px 0;
+  padding: ${statusBarHeight - 15}px 0 10px 0;
 `
 const SectionProfile = styled.View`
   flex-direction: row;
@@ -107,7 +108,7 @@ const TextPosition = styled.Text`
   letter-spacing: 0.12px;
   color: #FFFFFF;
 `
-const CollectionsButton = styled.View`
+const CollectionsButton = styled.TouchableOpacity`
   background: rgba(242, 165, 74, 0.1);
   flex-direction: row;
   align-items: center;
@@ -129,7 +130,6 @@ const TextCollection = styled.Text`
   font-size: 13px;
   line-height: 16px;
   letter-spacing: 0.12px;
-  text-transform: uppercase;
   color: #333333;
 `
 const TextEdit = styled.Text`

@@ -4,19 +4,19 @@ import CustomDrawer from "../components/Customdrawer";
 import BottomTabNavigator from "./TabNavigation";
 
 const Drawer = createDrawerNavigator();
-const DrawerNavigator = ({navigation}) => {
+const DrawerNavigator = () => {
     return (
         <Drawer.Navigator
             initialRouteName="New Collection"
             screenOptions={{
-                headerShown:false,
-                drawerType:"front",
-               }}
+                headerShown: false,
+                drawerType: "front",
+            }}
             drawerContent={props => <CustomDrawer {...props}
             />}
         >
             <Drawer.Screen name="New Collection" component={BottomTabNavigator}
-                        />
+            />
 
         </Drawer.Navigator>
     );

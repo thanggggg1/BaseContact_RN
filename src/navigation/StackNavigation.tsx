@@ -10,12 +10,13 @@ const Stack = createStackNavigator();
 const MainStackNavigator = () => {
     return (
         <Stack.Navigator initialRouteName="Home"
-                         screenOptions={{headerShown:false,
+                         screenOptions={{
+                             headerShown: false,
                          }}
-       >
-            <Stack.Screen name="Home" component={LoginScreen} />
-            <Stack.Screen name="ContactScreen" component={DrawerNavigator} />
-            <Stack.Screen name="New Edit Profile" component={NewEditProfile}/>
+        >
+            <Stack.Screen name="Home" component={LoginScreen}/>
+            <Stack.Screen name="ContactScreen" component={DrawerNavigator}/>
+            <Stack.Screen name="NewEditProfile" component={NewEditProfile}/>
             <Stack.Screen name="ContactDetails" component={ContactDetails}/>
         </Stack.Navigator>
     );

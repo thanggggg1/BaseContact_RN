@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {memo, useMemo, useState} from 'react';
+import {memo, useCallback, useMemo, useState} from 'react';
 import {KeyboardAvoidingView, Platform, TouchableOpacity, View} from 'react-native';
 import styled from "styled-components/native";
 import {IC_PROFILE, IC_SEARCH} from "../assets";
@@ -11,13 +11,29 @@ import {useDrawerStatus} from "@react-navigation/drawer";
 import {nonAccentVietnamese} from "../utils/nonAccentVietnamese";
 import {RawContact} from "../utils/type";
 
+const Item = memo((props:any)=>{
+    const navigation:any=useNavigation();
+  return(
+      <TouchableOpacity
+          onPress={()=>{navigation.navigate("ContactDetails", {paramKey: props.item.key})}}>
+              <ItemList>
+              <AvatarItem source={props.item.avatar == "" ? IC_PROFILE : {uri: props.item.key}}
+              />
+              <TextItem>
+              <NameItem>{props.item.firstname} {props.item.value} </NameItem>
+              <PhoneItem>{props.item.phone[props.item.phone.length - 1]}</PhoneItem>
+              </TextItem>
+              </ItemList>
+              </TouchableOpacity>
+  )
+})
 export const ContactScreen = memo(function Contact() {
     const navigation: any = useNavigation()
     const newContact = useContacts();
     const isDrawer = useDrawerStatus();
     const [search, setSearch] = useState('')
     const [filteredList, setFilteredList] = useState([])
-    const searchFilter = (str) => {
+    const searchFilter = useCallback((str:string)=>{
         const text = nonAccentVietnamese(str)
         if (text) {
             const newData: RawContact[] = Object.values(newContact.byKey)
@@ -30,7 +46,8 @@ export const ContactScreen = memo(function Contact() {
             setFilteredList(Object.values(newContact.byKey));
             setSearch(str)
         }
-    }
+    },[])
+
     const indexLetterStyle = useMemo(() => {
         return isDrawer === "closed" ? {
             color: '#f2a54a',
@@ -48,7 +65,7 @@ export const ContactScreen = memo(function Contact() {
         }
     }
     return (
-        <KeyboardAvoidingView style={{flex: 1}}
+        <SKeyboardAvoidingView
                               behavior={Platform.OS == "ios" ? 'padding' : null}
                               keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}>
             <Container>
@@ -56,7 +73,7 @@ export const ContactScreen = memo(function Contact() {
                     <SearchIcon source={IC_SEARCH}/>
                     <SearchBar
                         placeholder="Tìm kiếm danh bạ"
-                        placeholderTextColor="#444"
+                        placeholderTextColor={'rgba(189, 189, 189, 0.5)'}
                         onChangeText={searchFilter}
                         value={search}
                     />
@@ -67,19 +84,8 @@ export const ContactScreen = memo(function Contact() {
                             data={search ? filteredList : Object.values(newContact.byKey)}
                             indexContainerStyle={indexContainerStyle()}
                             indexLetterStyle={indexLetterStyle}
-                            renderCustomItem={(item: any) => (
-                                <TouchableOpacity
-                                    onPress={() => navigation.navigate("ContactDetails", {paramKey: item.key})}
-                                >
-                                    <ItemList>
-                                        <AvatarItem source={item.avatar == "" ? IC_PROFILE : {uri: item.avatar}}
-                                        />
-                                        <TextItem>
-                                            <NameItem>{item.firstname} {item.value} </NameItem>
-                                            <PhoneItem>{item.phone[item.phone.length - 1]}</PhoneItem>
-                                        </TextItem>
-                                    </ItemList>
-                                </TouchableOpacity>
+                            renderCustomItem={(item) => (
+                                <Item item={item}/>
                             )}
                             renderCustomSectionHeader={(section) => (
                                 <BarTitle>
@@ -91,7 +97,7 @@ export const ContactScreen = memo(function Contact() {
                     </View>
                 </ContentContainer>
             </Container>
-        </KeyboardAvoidingView>
+        </SKeyboardAvoidingView>
     )
 })
 
@@ -101,7 +107,6 @@ const Container = styled.View`
 `
 const SearchWrap = styled.View`
   background: #F2F2F2;
-  opacity: 0.5;
   border-radius: 6px;
   height: 36px;
   left: 10px;
@@ -117,10 +122,9 @@ const SearchIcon = styled.Image`
   margin: 0 10px;
 `
 const SearchBar = styled.TextInput`
-  font-weight: 200;
   font-size: 13px;
   letter-spacing: 0.12px;
-  color: #333;
+  color: #21130d;
   flex: auto;
 `
 const ContentContainer = styled.View`
@@ -176,5 +180,7 @@ const Background = styled.View`
   left: 0;
   right: 0;
 `
-
+const SKeyboardAvoidingView=styled(KeyboardAvoidingView)`
+flex: 1;
+`
 
