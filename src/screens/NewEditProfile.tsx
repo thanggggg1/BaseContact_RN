@@ -2,7 +2,7 @@ import * as React from 'react';
 import {memo, useCallback, useEffect, useMemo, useState} from 'react';
 import styled from "styled-components/native";
 import {IC_BACKGROUND_CIRCLE, IC_PROFILE, IC_UPDATE_AVATAR,} from "../assets";
-import {Dimensions, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity} from "react-native";
+import {KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity} from "react-native";
 import * as ImagePicker from 'react-native-image-picker';
 import {updateContactAction, useContacts} from "../store/redux";
 import {useNavigation, useRoute} from "@react-navigation/native";
@@ -12,6 +12,7 @@ import {nonAccentVietnamese} from "../utils/nonAccentVietnamese";
 import {InputInfoArr} from "../components/TextInputArray";
 import {InputInfoDate} from "../components/TextInputDate";
 import validator from 'validator'
+
 export const NewEditProfile = memo(function NewEditProfile() {
     const route: any = useRoute();
     const navigation: any = useNavigation();
@@ -19,7 +20,7 @@ export const NewEditProfile = memo(function NewEditProfile() {
     const itemEditContact = newEditContacts.byKey[route.params.paramKey]
     const [profileUri, setProfileUri] = useState("");
     const [isActive, setIsActive] = useState(false);
-    const [isValidEmail,setIsValidEmail]=useState(true);
+    const [isValidEmail, setIsValidEmail] = useState(true);
     const selectionOnchange = useMemo(() => {
         return {
             color: isActive ? '#828282' : '#F2A54A'
@@ -42,13 +43,18 @@ export const NewEditProfile = memo(function NewEditProfile() {
         address: [],
         date: '',
     })
-    useEffect(()=>{
-        if (params.value=='' && params.firstname=='' && params.avatar=='' && params.phone.length==0 && params.email.length==0 && params.address.length==0
-        ){
+    useEffect(() => {
+        setIsValidEmail(true)
+        params.email.map((item) => {
+            if (!validator.isEmail(item)) {
+                setIsValidEmail(false)
+            }
+        })
+        if (params.value == '' && params.firstname == '' && params.avatar == '' && params.phone.length == 0 && params.email.length == 0 && params.address.length == 0
+        ) {
             setIsActive(false)
-        }
-        else setIsActive(true)
-    },[params])
+        } else setIsActive(true)
+    }, [params])
     useEffect(() => {
         if (!itemEditContact) {
             return
@@ -56,26 +62,19 @@ export const NewEditProfile = memo(function NewEditProfile() {
         setParams({...itemEditContact})
     }, [itemEditContact]);
     const SearchText = `${params.firstname}${params.value}${nonAccentVietnamese(params.firstname)}${nonAccentVietnamese(params.value)}`
-    const onGoBack = useCallback(()=>{
+    const onGoBack = useCallback(() => {
         navigation.goBack()
-    },[])
+    }, [])
     const onDone = useCallback(async () => {
         if (params.value == "" || params.phone.includes('') || params.phone.length == 0) {
             alert('Please insert name or phone of the contact');
             return;
         }
-        params.email.every((item)=>{
-            if(!validator.isEmail(item)) {
-                setIsValidEmail(false)
-            }
-        })
-        console.log(isValidEmail)
-        if (isValidEmail || params?.email.length==0) {
+        if (isValidEmail || params?.email.length == 0) {
             params.searchField = SearchText;
             await updateContactAction(params)
             navigation.goBack()
-        }
-        else {
+        } else {
             alert('Please input correct email')
         }
 
@@ -127,41 +126,42 @@ export const NewEditProfile = memo(function NewEditProfile() {
                 </BtnHeader>
             </Header>
             <SKeyboardAvoidingView
-                                  behavior={Platform.OS == "ios" ? 'padding' : 'padding'}
-                                  keyboardVerticalOffset={Platform.OS=="ios" ? 0 : -200}
+                behavior={Platform.OS == "ios" ? 'padding' : null}
+                keyboardVerticalOffset={Platform.OS == "ios" ? 0 : 0}
             >
-            <ScrollView>
-                <SectionProfile>
-                    <BackgroundProfile source={IC_BACKGROUND_CIRCLE}/>
-                    <ProfilePicture
-                        source={itemEditContact?.avatar ? {uri: itemEditContact.avatar} : (profileUri ? {uri: profileUri} : IC_PROFILE)}
-                        style={ProfilePictureStyle}/>
-                    <TouchableOpacity onPress={onButtonPress}>
-                        <UpdateAvatar source={IC_UPDATE_AVATAR}
-                                      style={updateAvatarStyle}/>
-                    </TouchableOpacity>
-                </SectionProfile>
-                <SectionList>
-                    <ContentInput>
-                        <InputInfo keyName={'firstname'} onValueChange={onValueChange} value={params?.firstname}
-                                   placeholder={'Họ'}/>
-                        <InputInfo keyName={'value'} onValueChange={onValueChange} value={params?.value}
-                                   placeholder={'Tên'}/>
-                        <InputInfo keyName={'organization'} onValueChange={onValueChange} value={params?.organization}
-                                   placeholder={'Công ty'}/>
-                    </ContentInput>
-                    <SectionAddList>
-                        <InputInfoArr title={'thêm số điện thoại'}keyName={'phone'} data={params?.phone}
-                                      setParams={setParams} typeKeyboard={'number-pad'} />
-                        <InputInfoArr title={'thêm email'} keyName={'email'} data={params?.email}
-                                      setParams={setParams} typeKeyboard={'default'} />
-                        <InputInfoArr title={'thêm địa chỉ'} keyName={'address'} data={params?.address}
-                                      setParams={setParams} typeKeyboard={'default'} />
-                        <InputInfoDate title={'thêm ngày sinh'} keyName={'date'} data={params?.date}
-                                      setParams={setParams}/>
-                    </SectionAddList>
-                </SectionList>
-            </ScrollView>
+                <ScrollView>
+                    <SectionProfile>
+                        <BackgroundProfile source={IC_BACKGROUND_CIRCLE}/>
+                        <ProfilePicture
+                            source={itemEditContact?.avatar ? {uri: itemEditContact.avatar} : (profileUri ? {uri: profileUri} : IC_PROFILE)}
+                            style={ProfilePictureStyle}/>
+                        <TouchableOpacity onPress={onButtonPress}>
+                            <UpdateAvatar source={IC_UPDATE_AVATAR}
+                                          style={updateAvatarStyle}/>
+                        </TouchableOpacity>
+                    </SectionProfile>
+                    <SectionList>
+                        <ContentInput>
+                            <InputInfo keyName={'firstname'} onValueChange={onValueChange} value={params?.firstname}
+                                       placeholder={'Họ'}/>
+                            <InputInfo keyName={'value'} onValueChange={onValueChange} value={params?.value}
+                                       placeholder={'Tên'}/>
+                            <InputInfo keyName={'organization'} onValueChange={onValueChange}
+                                       value={params?.organization}
+                                       placeholder={'Công ty'}/>
+                        </ContentInput>
+                        <SectionAddList>
+                            <InputInfoArr title={'thêm số điện thoại'} keyName={'phone'} data={params?.phone}
+                                          setParams={setParams} typeKeyboard={'number-pad'}/>
+                            <InputInfoArr title={'thêm email'} keyName={'email'} data={params?.email}
+                                          setParams={setParams} typeKeyboard={'default'}/>
+                            <InputInfoArr title={'thêm địa chỉ'} keyName={'address'} data={params?.address}
+                                          setParams={setParams} typeKeyboard={'default'}/>
+                            <InputInfoDate title={'thêm ngày sinh'} keyName={'date'} data={params?.date}
+                                           setParams={setParams}/>
+                        </SectionAddList>
+                    </SectionList>
+                </ScrollView>
             </SKeyboardAvoidingView>
         </Container>
     )
@@ -232,4 +232,4 @@ const SectionAddList = styled.View`
 
 `
 const SKeyboardAvoidingView = styled(KeyboardAvoidingView)`
-flex: 1`
+  flex: 1`

@@ -1,17 +1,16 @@
-import {memo} from "react";
-import {IC_CALL_BUTTON} from "../assets";
 import * as React from "react";
+import {memo} from "react";
 import styled from "styled-components/native";
-import FastImage from "react-native-fast-image";
 
 
 interface Props {
     title: string,
-    image_url:any,
-    onPress : () => void
+    image_url: any,
+    onPress: () => void
 }
-export const ActiveActionButton = memo( function ActiveActionButton(props:Props){
-    const {title, image_url,onPress} = props;
+
+export const ActiveActionButton = memo(function ActiveActionButton(props: Props) {
+    const {title, image_url, onPress} = props;
     return (
         <ButtonAction onPress={onPress}>
             <BackgroundButtonAction>
@@ -38,7 +37,7 @@ const BackgroundButtonAction = styled.View`
 `
 
 const ImageButtonAction = styled.Image`
-tint-color:white;
+  tint-color: white;
 `
 const TextButtonAction = styled.Text`
   font-weight: 400;

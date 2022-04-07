@@ -48,6 +48,6 @@ const TextButtonAction = styled.Text`
   font-weight: 400;
   font-size: 11px;
   letter-spacing: -0.41px;
-  color: #F2A54A;
+  color: #BDBDBD;
   padding-top: 10px;
 `

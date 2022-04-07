@@ -1,24 +1,48 @@
 import * as React from 'react';
-import {useMemo} from 'react';
+import {memo, useMemo} from 'react';
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {IC_CONTACT, IC_HISTORY} from "../assets";
 import styled from "styled-components/native";
-import {Platform, StyleSheet} from "react-native";
+import {Dimensions, Platform, StyleSheet, View, Text} from "react-native";
 import {HeaderBase} from "../components/Header";
 import {ContactScreen} from "../screens/ContactScreen";
 import {HistoryScreen} from "../screens/HistoryScreen";
 
+const ItemSearchIcon = memo((props: any) => {
+    return (
+        <SearchIcon>
+            <SearchIconImage
+                resizeMode="contain"
+                source={IC_CONTACT}
+                style={[styles.tabBarIcon, props.focused && styles.tabBarIconFocused]}
+            />
+            <WrapTabBarText style={[styles.tabBarText, props.focused && styles.tabBarTextFocused]}>Danh
+                bạ</WrapTabBarText>
+        </SearchIcon>
+
+    )
+})
+const ItemHistoryIcon = memo((props: any) => {
+    return (
+        <HistoryIcon>
+            <HistoryIconImage
+                resizeMode="contain"
+                source={IC_HISTORY}
+                style={[styles.tabBarIcon, props.focused && styles.tabBarIconFocused]}
+            />
+            <WrapTabBarText style={[styles.tabBarText, props.focused && styles.tabBarTextFocused]}
+            >Gần đây</WrapTabBarText>
+        </HistoryIcon>
+    )
+})
 const Tab = createBottomTabNavigator();
 const BottomTabNavigator = ({navigation}) => {
-
     const screenOptions = useMemo(() => {
         return {
             tabBarActiveTintColor: '#fff',
             tabBarStyle: {backgroundColor: '#f2a54a'},
-            tabBarInactiveTintColor: "#DADADA",
-            tabBarItemStyle: {paddingBottom: Platform.OS == 'ios' ? 0 : 5},
-            tabBarLabelStyle : {},
-            tabBarIconStyle : {},
+            tabBarLabelStyle: {display: 'none' as const},
+            tabBarHideOnKeyboard: true,
             header: props => <HeaderBase navigation={navigation} {...props}/>
         }
     }, [navigation])
@@ -30,38 +54,45 @@ const BottomTabNavigator = ({navigation}) => {
                         options={{
                             tabBarIcon: ({focused}) => {
                                 return (
-                                    <SearchIcon
-                                        resizeMode="contain"
-                                        source={IC_CONTACT}
-                                        style={[styles.tabBarIcon, focused && styles.tabBarIconFocused]}
-                                    />
+                                    <ItemSearchIcon focused={focused}/>
                                 )
                             },
-                        }}/>
+                        }}></Tab.Screen>
             <Tab.Screen name="Gần đây" component={HistoryScreen}
                         options={{
                             tabBarIcon: ({focused}) => {
                                 return (
-                                    <HistoryIcon
-                                        resizeMode="contain"
-                                        source={IC_HISTORY}
-                                        style={[styles.tabBarIcon, focused && styles.tabBarIconFocused]}
-                                    />
+                                    <ItemHistoryIcon focused={focused}/>
                                 )
                             },
                         }}/>
         </Tab.Navigator>
+
     );
 };
-const SearchIcon = styled.Image`
+
+const SearchIconImage = styled.Image`
+  margin-top: 10px;
   width: 18px;
   height: 20px;
   tint-color: white;
 `
-const HistoryIcon = styled.Image`
+const HistoryIconImage = styled.Image`
+  margin-top: 10px;
   width: 18px;
   height: 20px;
   tint-color: #fff;
+`
+const HistoryIcon = styled.View`
+  margin-top: 5px;
+  align-items: center;
+`
+const SearchIcon = styled.View`
+  margin-top: 5px;
+  align-items: center;
+`
+const WrapTabBarText = styled.Text`
+
 `
 const styles = StyleSheet.create({
     tabBarIcon: {
@@ -73,6 +104,22 @@ const styles = StyleSheet.create({
         width: 23,
         tintColor: '#fff',
         height: 23,
+    },
+    tabBarText: {
+        fontSize: 10,
+        textAlign: 'center',
+        letterSpacing: 0.12,
+        color: '#FFDAAE',
+        paddingTop: 3,
+        paddingBottom: 15
+    },
+    tabBarTextFocused: {
+        fontSize: 10,
+        textAlign: 'center',
+        letterSpacing: 0.12,
+        color: '#FFFFFF',
+        paddingTop: 3,
+        paddingBottom: 15
     }
 });
 export default BottomTabNavigator;

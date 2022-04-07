@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {memo} from 'react';
 
-import {FlatList, View} from 'react-native';
+import {FlatList, SafeAreaView, View} from 'react-native';
 import styled from "styled-components/native";
 import {IC_INFO_ICON, IC_LINE, IC_SMALL_CALL} from "../assets";
 import 'react-native-gesture-handler';
@@ -50,13 +50,11 @@ export const HistoryScreen = memo(function History() {
     )
     return (
         <Container>
-            <ContentContainer>
-                <FlatList
+            <FlatList
                     data={contacts}
                     renderItem={renderItem}
                     keyExtractor={item => item.key}
                 />
-            </ContentContainer>
         </Container>
     )
 })
@@ -64,8 +62,6 @@ const Container = styled.View`
   flex: 1;
   background-color: #ffffff;
   padding-top: 25px;
-`
-const ContentContainer = styled.View`
 `
 const SectionList = styled.View`
   margin-bottom: 10px;

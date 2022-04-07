@@ -19,7 +19,7 @@ const Item =memo((props:Props)=>{
         _onInfoChange(keyName, index, value)
     },[])
     return(
-        <ItemAdd>
+        <ItemRemove>
             <ItemButtonAdd>
                 <RemoveButton onPress={() => {
                     onDelete(keyName, index)
@@ -38,7 +38,7 @@ const Item =memo((props:Props)=>{
                 >
                 </TextAddInfo>
             </AddItem>
-        </ItemAdd>
+        </ItemRemove>
     )
 })
 
@@ -103,6 +103,15 @@ const Container = styled.View`
   margin-bottom: 25px;
 `
 const ItemAdd = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+  border-bottom-color: rgba(0, 0, 0, 0.1);
+  border-bottom-width: 1px;
+  margin-left: 15px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+`
+const ItemRemove = styled.View`
   flex-direction: row;
   align-items: center;
   border-bottom-color: rgba(0, 0, 0, 0.1);

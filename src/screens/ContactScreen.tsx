@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {memo, useCallback, useMemo, useState} from 'react';
-import {KeyboardAvoidingView, Platform, TouchableOpacity, View} from 'react-native';
+import {KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, View} from 'react-native';
 import styled from "styled-components/native";
 import {IC_PROFILE, IC_SEARCH} from "../assets";
 import {useContacts} from "../store/redux";
@@ -19,11 +19,11 @@ const Item = memo((props:any)=>{
   return(
       <TouchableOpacity onPress={onPress}>
               <ItemList>
-              <AvatarItem source={props.item.avatar == "" ? IC_PROFILE : {uri: props.item.key}}
+              <AvatarItem source={props.item.avatar == "" ? IC_PROFILE : {uri: props.item.avatar}}
               />
               <TextItem>
-              <NameItem>{props.item.firstname} {props.item.value} </NameItem>
-              <PhoneItem>{props.item.phone[props.item.phone.length - 1]}</PhoneItem>
+                  <NameItem>{props.item.firstname} {props.item.value} </NameItem>
+                  <PhoneItem>{props.item.phone[props.item.phone.length - 1]}</PhoneItem>
               </TextItem>
               </ItemList>
               </TouchableOpacity>
@@ -81,7 +81,6 @@ export const ContactScreen = memo(function Contact() {
                     />
                 </SearchWrap>
                 <ContentContainer>
-                    <View>
                         <AlphabetList
                             data={search ? filteredList : Object.values(newContact.byKey)}
                             indexContainerStyle={indexContainerStyle()}
@@ -96,7 +95,6 @@ export const ContactScreen = memo(function Contact() {
                                 </BarTitle>
                             )}
                         />
-                    </View>
                 </ContentContainer>
             </Container>
         </SKeyboardAvoidingView>
@@ -117,6 +115,7 @@ const SearchWrap = styled.View`
   flex-direction: row;
   padding-right: 10px;
   margin-bottom: -50px;
+  margin-right: 20px;
 `
 const SearchIcon = styled.Image`
   height: 16px;
@@ -129,29 +128,29 @@ const SearchBar = styled.TextInput`
   color: #21130d;
   flex: auto;
 `
-const ContentContainer = styled.View`
+const ContentContainer = styled.ScrollView`
   margin-top: 80px;
   padding-right: 0;
 `
 const ItemList = styled.View`
   padding-top: 10px;
-  padding-bottom: 10px;
   margin-left: 20px;
   flex-direction: row;
   margin-bottom: -5px;
   margin-top: 5px;
-  border-bottom-width: 1px;
-  border-bottom-color: rgba(0, 0, 0, 0.1);
 `
 const TextItem = styled.View`
-  padding-left: 20px;
+  flex: auto;
+  margin-left: 20px;
+  border-bottom-width: 1px;
+  border-bottom-color: rgba(0, 0, 0, 0.1);
+  padding-bottom: 10px;
 `
 const NameItem = styled.Text`
   font-size: 16px;
-  letter-spacing: 0.12px;
   color: #333333;
   padding-bottom: 5px;
-  font-weight: 500;
+  font-weight: bold;
 `
 const PhoneItem = styled.Text`
   font-size: 14px;
