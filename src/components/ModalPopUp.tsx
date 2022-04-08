@@ -1,7 +1,6 @@
-import {memo, useCallback} from "react";
-import {IC_SMALL_CALL} from "../assets";
-import Modal from "react-native-modal";
 import * as React from "react";
+import {memo, useCallback} from "react";
+import Modal from "react-native-modal";
 import styled from "styled-components/native";
 
 interface Props {

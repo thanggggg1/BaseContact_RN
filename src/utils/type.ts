@@ -2,6 +2,7 @@ export interface RawContact {
     key: string,
     value: string,
     firstname : string,
+    lastname:string,
     avatar : string,
     organization:string,
     searchField:string,
@@ -9,4 +10,5 @@ export interface RawContact {
     email:string[],
     address:string[],
     date:any,
+    historyLog:string,
 }

@@ -11,7 +11,7 @@ import {
     IC_PROFILE,
     IC_SMALL_CALL,
 } from "../assets";
-import {removeContactAction, useContacts} from "../store/redux";
+import {removeContactAction, updateContactAction, useContacts} from "../store/redux";
 import call from 'react-native-phone-call'
 import {Alert, Linking, Platform, TouchableOpacity} from "react-native";
 import {useNavigation, useRoute} from "@react-navigation/native";
@@ -66,22 +66,6 @@ export const ContactDetails = memo(function AddedContact() {
             ]
         );
     }, [])
-    const onSendSMSMessage = useCallback(async (phoneNumber, message) => {
-        const separator = Platform.OS === 'ios' ? '&' : '?'
-        const url = `sms:${phoneNumber}${separator}body=${message}`
-        await Linking.openURL(url)
-    }, [])
-    const triggerCall = useCallback((phonenumber: string) => {
-        const args = {
-            number: phonenumber,
-            prompt: true,
-        };
-        call(args).catch(console.error);
-    }, [])
-    const sendSMS = useCallback((item: string) => {
-        onSendSMSMessage(item, `xin chao ${newContact?.firstname} ${newContact?.value}`)
-    }, [])
-
     const onNavigateContactScreen = useCallback(() => {
         navigation.navigate("ContactScreen")
     }, [])
@@ -90,11 +74,33 @@ export const ContactDetails = memo(function AddedContact() {
         navigation.navigate("NewEditProfile", {paramKey: newContact.key})
     }, [])
 
+    const onSendSMSMessage = useCallback(async (phoneNumber, message) => {
+        const separator = Platform.OS === 'ios' ? '&' : '?'
+        const url = `sms:${phoneNumber}${separator}body=${message}`
+        await Linking.openURL(url)
+    }, [])
+    const triggerCall = useCallback( (phoneNumber: string) => {
+        const args = {
+            number: phoneNumber,
+            prompt: true,
+        };
+        newContact.historyLog='CallAction'
+         call(args).catch(console.error);
+    }, [])
+
+    const sendSMS = useCallback((item: string) => {
+        newContact.historyLog='MessAction'
+        console.log(newContact.historyLog)
+        onSendSMSMessage(item, `xin chao ${newContact?.firstname} ${newContact?.lastname}`)
+    }, [])
+
     const sendEmail = useCallback((item: string) => {
-        Linking.openURL(`mailto:${item}?subject=mailsubject&body=mailbody`);
+        newContact.historyLog='MessAction'
+        Linking.openURL(`mailto:${item}?subject=mailSubject&body=mailBody`);
     }, [])
 
     const faceTime = useCallback((item: string) => {
+        newContact.historyLog='CallAction'
         Facetime(item)
     }, [])
 
@@ -149,7 +155,7 @@ export const ContactDetails = memo(function AddedContact() {
         <Container>
             <ModalPopUp isModalVisible={isPhoneModalVisible} setModalVisible={setPhoneModalVisible} data={newContact?.phone} _onMakeAction={triggerCall} title={'Choose Number '} _image_url={IC_SMALL_CALL}/>
             <ModalPopUp isModalVisible={isSMSModalVisible} setModalVisible={setSMSModalVisible} data={newContact?.phone} _onMakeAction={sendSMS} title={'Choose Number to send '} _image_url={IC_EMAIL}/>
-            <ModalPopUp isModalVisible={isFaceTimeModalVisible} setModalVisible={setFaceTimeModalVisible} data={newContact?.phone} _onMakeAction={faceTime} title={'Choose Number to send '} _image_url={IC_SMALL_CALL}/>
+            <ModalPopUp isModalVisible={isFaceTimeModalVisible} setModalVisible={setFaceTimeModalVisible} data={newContact?.phone} _onMakeAction={faceTime} title={'Choose Number'} _image_url={IC_SMALL_CALL}/>
             <ModalPopUp isModalVisible={isEmailModalVisible} setModalVisible={setEmailModalVisible} data={newContact?.email} _onMakeAction={sendEmail} title={'Choose Email'} _image_url={IC_EMAIL}/>
             <SectionProfile>
                 <Background/>
@@ -172,7 +178,7 @@ export const ContactDetails = memo(function AddedContact() {
                         <PictureAvatar>
                             <ImageUser source={newContact?.avatar == "" ? IC_PROFILE : {uri: newContact?.avatar}}/>
                         </PictureAvatar>
-                        <TextName>{newContact?.firstname} {newContact?.value}</TextName>
+                        <TextName>{newContact?.firstname} {newContact?.lastname}</TextName>
                         <TextJob>UI/UX Design</TextJob>
                     </Information>
                     <ListButtonAction>
@@ -298,8 +304,6 @@ const ListButtonAction = styled.View`
 `
 const WrappedInformation = styled.View`
 `
-
-
 const TextOptions = styled.Text`
   font-size: 15px;
   letter-spacing: -0.41px;
@@ -328,18 +332,5 @@ const ImageLine = styled.Image`
   margin-top: 5px;
   width: 100%;
   height: 2px;
-`
-const ItemList = styled.TouchableOpacity`
-  flex-direction: row;
-  justify-content: space-between;
-  border-bottom-color: rgba(0, 0, 0, 0.1);
-  border-bottom-width: 1px;
-  padding-top: 10px;
-`
-const TextAction = styled.Text`
-  padding-bottom: 10px;
-`
-const IconAction = styled.Image`
-
 `
 

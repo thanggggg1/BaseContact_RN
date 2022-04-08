@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {memo, useCallback, useMemo, useState} from 'react';
-import {KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, View} from 'react-native';
+import {KeyboardAvoidingView, Platform, TouchableOpacity} from 'react-native';
 import styled from "styled-components/native";
 import {IC_PROFILE, IC_SEARCH} from "../assets";
 import {useContacts} from "../store/redux";
@@ -10,7 +10,7 @@ import FastImage from 'react-native-fast-image'
 import {useDrawerStatus} from "@react-navigation/drawer";
 import {nonAccentVietnamese} from "../utils/nonAccentVietnamese";
 import {RawContact} from "../utils/type";
-
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 const Item = memo((props:any)=>{
     const navigation:any=useNavigation();
     const onPress = useCallback(()=>{
@@ -22,7 +22,7 @@ const Item = memo((props:any)=>{
               <AvatarItem source={props.item.avatar == "" ? IC_PROFILE : {uri: props.item.avatar}}
               />
               <TextItem>
-                  <NameItem>{props.item.firstname} {props.item.value} </NameItem>
+                  <NameItem>{props.item.firstname} {props.item.lastname} </NameItem>
                   <PhoneItem>{props.item.phone[props.item.phone.length - 1]}</PhoneItem>
               </TextItem>
               </ItemList>
@@ -30,7 +30,6 @@ const Item = memo((props:any)=>{
   )
 })
 export const ContactScreen = memo(function Contact() {
-    const navigation: any = useNavigation()
     const newContact = useContacts();
     const isDrawer = useDrawerStatus();
     const [search, setSearch] = useState('')
@@ -67,9 +66,7 @@ export const ContactScreen = memo(function Contact() {
         }
     }
     return (
-        <SKeyboardAvoidingView
-                              behavior={Platform.OS == "ios" ? 'padding' : null}
-                              keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}>
+
             <Container>
                 <SearchWrap>
                     <SearchIcon source={IC_SEARCH}/>
@@ -96,12 +93,13 @@ export const ContactScreen = memo(function Contact() {
                             )}
                         />
                 </ContentContainer>
+                <KeyboardSpacer/>
             </Container>
-        </SKeyboardAvoidingView>
     )
 })
 
-const Container = styled.View`
+const Container = styled.ScrollView`
+  display: flex;
   flex: 1;
   background-color: #ffffff;
 `
@@ -128,7 +126,7 @@ const SearchBar = styled.TextInput`
   color: #21130d;
   flex: auto;
 `
-const ContentContainer = styled.ScrollView`
+const ContentContainer = styled.View`
   margin-top: 80px;
   padding-right: 0;
 `

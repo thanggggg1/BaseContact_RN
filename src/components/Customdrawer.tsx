@@ -31,7 +31,7 @@ const CustomDrawer = props => {
                         <ImageProfile source={IMG_PROFILE_AVATAR}/>
                     </AvatarProfile>
                     <ContentProfile>
-                        <TextName>Nguyễn Tiến Nam</TextName>
+                        <TextName>Lương Quang Thắng</TextName>
                         <TextPosition>Admin Admin</TextPosition>
                     </ContentProfile>
                 </SectionProfile>

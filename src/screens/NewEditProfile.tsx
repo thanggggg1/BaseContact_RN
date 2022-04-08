@@ -35,6 +35,7 @@ export const NewEditProfile = memo(function NewEditProfile() {
         key: `${new Date().getTime()}`,
         value: '',
         firstname: '',
+        lastname:'',
         avatar: '',
         organization: '',
         searchField: '',
@@ -42,6 +43,7 @@ export const NewEditProfile = memo(function NewEditProfile() {
         email: [],
         address: [],
         date: '',
+        historyLog:''
     })
     useEffect(() => {
         setIsValidEmail(true)
@@ -50,7 +52,8 @@ export const NewEditProfile = memo(function NewEditProfile() {
                 setIsValidEmail(false)
             }
         })
-        if (params.value == '' && params.firstname == '' && params.avatar == '' && params.phone.length == 0 && params.email.length == 0 && params.address.length == 0
+        if (params.email.includes('')) setIsValidEmail(false)
+        if (params.lastname == '' && params.firstname == '' && params.avatar == '' && params.phone.length == 0 && params.email.length == 0 && params.address.length == 0
         ) {
             setIsActive(false)
         } else setIsActive(true)
@@ -61,17 +64,19 @@ export const NewEditProfile = memo(function NewEditProfile() {
         }
         setParams({...itemEditContact})
     }, [itemEditContact]);
-    const SearchText = `${params.firstname}${params.value}${nonAccentVietnamese(params.firstname)}${nonAccentVietnamese(params.value)}`
+    const SearchText = `${params.firstname}${params.lastname}${nonAccentVietnamese(params.firstname)}${nonAccentVietnamese(params.lastname)}`
+    const ValueText = `${nonAccentVietnamese(params.lastname)}${nonAccentVietnamese(params.firstname)}`
     const onGoBack = useCallback(() => {
         navigation.goBack()
     }, [])
     const onDone = useCallback(async () => {
+        params.searchField = SearchText;
+        params.value=ValueText;
         if (params.value == "" || params.phone.includes('') || params.phone.length == 0) {
             alert('Please insert name or phone of the contact');
             return;
         }
         if (isValidEmail || params?.email.length == 0) {
-            params.searchField = SearchText;
             await updateContactAction(params)
             navigation.goBack()
         } else {
@@ -144,7 +149,7 @@ export const NewEditProfile = memo(function NewEditProfile() {
                         <ContentInput>
                             <InputInfo keyName={'firstname'} onValueChange={onValueChange} value={params?.firstname}
                                        placeholder={'Họ'}/>
-                            <InputInfo keyName={'value'} onValueChange={onValueChange} value={params?.value}
+                            <InputInfo keyName={'lastname'} onValueChange={onValueChange} value={params?.lastname}
                                        placeholder={'Tên'}/>
                             <InputInfo keyName={'organization'} onValueChange={onValueChange}
                                        value={params?.organization}

@@ -1,23 +1,26 @@
 import * as React from 'react';
-import {memo} from 'react';
+import {memo, useCallback, useEffect, useState} from 'react';
 
 import {FlatList, SafeAreaView, View} from 'react-native';
 import styled from "styled-components/native";
-import {IC_INFO_ICON, IC_LINE, IC_SMALL_CALL} from "../assets";
+import {IC_EMAIL, IC_INFO_ICON, IC_LINE, IC_SMALL_CALL} from "../assets";
 import 'react-native-gesture-handler';
+import {useContacts} from "../store/redux";
+import {RawContact} from "../utils/type";
+import { useIsFocused } from '@react-navigation/native';
 
-const Item = ({name, phone, status}) => (
+const Item = ({firstname,lastname, phone, status,action}) => (
     <SectionList>
         <ItemList>
             <InfoPart>
                 <CallIcon>
                     <CallIconImage
-                        source={IC_SMALL_CALL}
+                        source={ action =='CallAction' ? IC_SMALL_CALL : IC_EMAIL}
                     />
                 </CallIcon>
                 <TextItem>
                     <NameItem>
-                        {name}
+                        {firstname} {lastname}
                     </NameItem>
                     <PhoneItem>
                         {phone}
@@ -41,17 +44,29 @@ const Item = ({name, phone, status}) => (
     </SectionList>
 )
 export const HistoryScreen = memo(function History() {
+    const isFocused = useIsFocused();
+    const [historyList,setHistoryList]=useState([])
+    const newContacts = useContacts();
+    useEffect(()=>{
+        const newData: RawContact[] = Object.values(newContacts.byKey)
+        const data=newData.filter(item => {
+            return item.historyLog!='';
+        })
+        setHistoryList(data)
+    },[isFocused])
     const renderItem = ({item}) => (
         <Item
-            name={item.name}
-            phone={item.phone}
-            status={item.status}
+            firstname={item.firstname}
+            lastname={item.lastname}
+            phone={item.phone[item.phone.length-1]}
+            status={'Hôm nay'}
+            action={item.historyLog}
         />
     )
     return (
         <Container>
             <FlatList
-                    data={contacts}
+                    data={historyList}
                     renderItem={renderItem}
                     keyExtractor={item => item.key}
                 />
@@ -63,7 +78,7 @@ const Container = styled.View`
   background-color: #ffffff;
   padding-top: 25px;
 `
-const SectionList = styled.View`
+const SectionList = styled.TouchableOpacity`
   margin-bottom: 10px;
   margin-left: 20px;
 `
@@ -123,54 +138,3 @@ const InfoIconImage = styled.Image`
   width: 24px;
   height: 24px;
 `
-const contacts = [
-    {
-        key: 'lCUTs2',
-        name: "Nguyễn Tiến Nam",
-        phone: "0977272123",
-        status: "Hôm Nay"
-    },
-    {
-        key: 'sddsf45',
-        name: "Nguyễn Tiến Nam",
-        phone: "0977272123",
-        status: "Hôm Nay"
-    },
-    {
-        key: 'dsf45',
-        name: "Nguyễn Tiến Nam",
-        phone: "0977272123",
-        status: "Hôm Nay"
-    },
-    {
-        key: 'qwe32',
-        name: "Nguyễn Tiến Nam",
-        phone: "0977272123",
-        status: "Hôm Nay"
-    },
-    {
-        key: 'fdsdf1',
-        name: "Nguyễn Tiến Nam",
-        phone: "0977272123",
-        status: "Hôm Nay"
-    },
-    {
-        key: '23fd',
-        name: "Nguyễn Tiến Nam",
-        phone: "0977272123",
-        status: "Hôm Nay"
-    },
-    {
-        key: '2few',
-        name: "Nguyễn Tiến Nam",
-        phone: "0977272123",
-        status: "Hôm Nay"
-    },
-    {
-        key: 'sdfew',
-        name: "Nguyễn Tiến Nam",
-        phone: "0977272123",
-        status: "Hôm Nay"
-    },
-
-];
