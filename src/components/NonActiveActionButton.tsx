@@ -6,22 +6,28 @@ import styled from "styled-components/native";
 interface Props {
     title: string,
     image_url:any,
-    onPress : () => void
 }
 export const NonActiveActionButton = memo( function NonActiveActionButton(props:Props){
-    const {title, image_url,onPress} = props;
+    const {title, image_url} = props;
+
     return (
-        <ButtonAction onPress={onPress}
-        disabled={true}>
-            <BackgroundNonTouchAction>
-                <ImageButtonAction source={image_url}/>
-            </BackgroundNonTouchAction>
-            <TextButtonAction>
-                {title}
-            </TextButtonAction>
-        </ButtonAction>
+        <Container>
+            <ButtonAction
+                disabled={true}>
+                <BackgroundNonTouchAction>
+                    <ImageButtonAction source={image_url}/>
+                </BackgroundNonTouchAction>
+                <TextButtonAction>
+                    {title}
+                </TextButtonAction>
+            </ButtonAction>
+        </Container>
     )
 })
+
+const Container = styled.View`
+flex: 1
+`
 
 const ButtonAction = styled.TouchableOpacity`
   align-items: center;

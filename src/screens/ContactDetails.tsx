@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {memo, useCallback, useState} from 'react';
+import {memo, useCallback} from 'react';
 import styled from "styled-components/native";
 import {
     IC_ARROW_BACK_BUTTON,
@@ -9,18 +9,16 @@ import {
     IC_LINE_DOWN,
     IC_MESSAGE_BUTTON,
     IC_PROFILE,
-    IC_SMALL_CALL,
 } from "../assets";
-import {removeContactAction, updateContactAction, useContacts} from "../store/redux";
-import call from 'react-native-phone-call'
-import {Alert, Linking, Platform, TouchableOpacity} from "react-native";
+import {removeContactAction, useContacts} from "../store/redux";
+import {Alert, Platform, TouchableOpacity} from "react-native";
 import {useNavigation, useRoute} from "@react-navigation/native";
 import FastImage from "react-native-fast-image";
 import {getStatusBarHeight} from "react-native-iphone-x-helper";
 import {ActiveActionButton} from "../components/ActiveActionButton";
 import {NonActiveActionButton} from "../components/NonActiveActionButton";
-import {Facetime} from 'react-native-openanything';
-import {ModalPopUp} from "../components/ModalPopUp";
+import call from 'react-native-phone-call'
+import {TextSMSAction} from "../components/TextSMSAction";
 
 interface PropsCall {
     item: string,
@@ -39,29 +37,26 @@ const CallAction = memo((props: PropsCall) => {
         </TouchableOpacity>
     )
 })
+
 export const ContactDetails = memo(function AddedContact() {
     const navigation: any = useNavigation();
     const route: any = useRoute()
     const newContacts = useContacts();
     const newContact = newContacts.byKey[route.params.paramKey]
-    const [isPhoneModalVisible, setPhoneModalVisible] = useState(false);
-    const [isEmailModalVisible, setEmailModalVisible] = useState(false);
-    const [isSMSModalVisible, setSMSModalVisible] = useState(false);
-    const [isFaceTimeModalVisible, setFaceTimeModalVisible] = useState(false);
     const onDelete = useCallback(() => {
         return Alert.alert(
             "Are you sure?",
             "Are you sure you want to remove this contact?",
             [
                 {
+                    text: "No",
+                },
+                {
                     text: "Yes",
                     onPress: async () => {
                         await removeContactAction(newContact?.key)
                         navigation.navigate('ContactScreen')
                     },
-                },
-                {
-                    text: "No",
                 },
             ]
         );
@@ -73,90 +68,17 @@ export const ContactDetails = memo(function AddedContact() {
     const onNavigateEditProfile = useCallback(() => {
         navigation.navigate("NewEditProfile", {paramKey: newContact.key})
     }, [])
-
-    const onSendSMSMessage = useCallback(async (phoneNumber, message) => {
-        const separator = Platform.OS === 'ios' ? '&' : '?'
-        const url = `sms:${phoneNumber}${separator}body=${message}`
-        await Linking.openURL(url)
-    }, [])
-    const triggerCall = useCallback( (phoneNumber: string) => {
+    
+    const triggerCall = useCallback((phoneNumber: string) => {
         const args = {
             number: phoneNumber,
             prompt: true,
         };
-        newContact.historyLog='CallAction'
-         call(args).catch(console.error);
+        call(args).catch(console.error);
     }, [])
-
-    const sendSMS = useCallback((item: string) => {
-        newContact.historyLog='MessAction'
-        console.log(newContact.historyLog)
-        onSendSMSMessage(item, `xin chao ${newContact?.firstname} ${newContact?.lastname}`)
-    }, [])
-
-    const sendEmail = useCallback((item: string) => {
-        newContact.historyLog='MessAction'
-        Linking.openURL(`mailto:${item}?subject=mailSubject&body=mailBody`);
-    }, [])
-
-    const faceTime = useCallback((item: string) => {
-        newContact.historyLog='CallAction'
-        Facetime(item)
-    }, [])
-
-    const onButtonCall = useCallback(() => {
-        if (newContact?.phone.length <= 1) {
-            triggerCall(newContact?.phone[0])
-        } else {
-            togglePhoneModal()
-        }
-    }, [newContact, isPhoneModalVisible])
-
-    const onButtonEmail = useCallback(() => {
-        if (newContact?.email.length <= 1) {
-            sendEmail(newContact?.email[0])
-        } else {
-            toggleEmailModal()
-        }
-    }, [newContact, isEmailModalVisible])
-
-    const onButtonSMS = useCallback(() => {
-        if (newContact?.phone.length <= 1) {
-            sendSMS(newContact?.phone[0])
-        } else {
-            toogleSMSModal()
-        }
-    }, [newContact, isEmailModalVisible])
-
-    const onButtonFacetime = useCallback(() => {
-        if (newContact?.phone.length <= 1) {
-            faceTime(newContact?.phone[0])
-        } else {
-            toogleFacetimeModal()
-        }
-    }, [newContact, isEmailModalVisible])
-
-    const togglePhoneModal = () => {
-        setPhoneModalVisible(!isPhoneModalVisible);
-    };
-
-    const toggleEmailModal = () => {
-        setEmailModalVisible(!isEmailModalVisible);
-    };
-
-    const toogleSMSModal = () => {
-        setSMSModalVisible(!isSMSModalVisible)
-    }
-    const toogleFacetimeModal = () => {
-        setFaceTimeModalVisible(!isFaceTimeModalVisible)
-    }
 
     return (
         <Container>
-            <ModalPopUp isModalVisible={isPhoneModalVisible} setModalVisible={setPhoneModalVisible} data={newContact?.phone} _onMakeAction={triggerCall} title={'Choose Number '} _image_url={IC_SMALL_CALL}/>
-            <ModalPopUp isModalVisible={isSMSModalVisible} setModalVisible={setSMSModalVisible} data={newContact?.phone} _onMakeAction={sendSMS} title={'Choose Number to send '} _image_url={IC_EMAIL}/>
-            <ModalPopUp isModalVisible={isFaceTimeModalVisible} setModalVisible={setFaceTimeModalVisible} data={newContact?.phone} _onMakeAction={faceTime} title={'Choose Number'} _image_url={IC_SMALL_CALL}/>
-            <ModalPopUp isModalVisible={isEmailModalVisible} setModalVisible={setEmailModalVisible} data={newContact?.email} _onMakeAction={sendEmail} title={'Choose Email'} _image_url={IC_EMAIL}/>
             <SectionProfile>
                 <Background/>
                 <Header>
@@ -182,12 +104,16 @@ export const ContactDetails = memo(function AddedContact() {
                         <TextJob>UI/UX Design</TextJob>
                     </Information>
                     <ListButtonAction>
-                        <ActiveActionButton title={'Nhấn gọi điện'} image_url={IC_CALL_BUTTON} onPress={onButtonCall}/>
-                        <ActiveActionButton title={'Nhắn tin'} image_url={IC_MESSAGE_BUTTON} onPress={onButtonSMS}/>
-                        <ActiveActionButton title={'Facetime'} image_url={IC_FACETIME} onPress={onButtonFacetime}/>
+                        <ActiveActionButton title={'Nhấn gọi điện'} image_url={IC_CALL_BUTTON} keyName={'CallAction'}
+                                            data={newContact?.phone} wrapData={newContact}/>
+                        <ActiveActionButton title={'Nhắn tin'} image_url={IC_MESSAGE_BUTTON} keyName={'MessAction'}
+                                            data={newContact?.phone} wrapData={newContact}/>
+                        <ActiveActionButton title={'Facetime'} image_url={IC_FACETIME} keyName={'FacetimeAction'}
+                                            data={newContact?.phone} wrapData={newContact}/>
                         {newContact?.email.length != 0 ?
-                            <ActiveActionButton title={'Gửi mail'} image_url={IC_EMAIL} onPress={onButtonEmail}/> :
-                            <NonActiveActionButton title={'Gửi mail'} image_url={IC_EMAIL} onPress={null}/>
+                            <ActiveActionButton title={'Gửi mail'} image_url={IC_EMAIL} keyName={'EmailAction'}
+                                                data={newContact?.email} wrapData={newContact}/> :
+                            <NonActiveActionButton title={'Gửi mail'} image_url={IC_EMAIL}/>
                         }
                     </ListButtonAction>
                 </WrappedInformation>
@@ -206,11 +132,8 @@ export const ContactDetails = memo(function AddedContact() {
                     Ghi chú
                 </TextNote>
                 <ImageLine source={IC_LINE_DOWN}/>
-                <TouchableOpacity onPress={onButtonSMS}>
-                    <TextMessage>
-                        Gửi tin nhắn
-                    </TextMessage>
-                </TouchableOpacity>
+                <TextSMSAction title={'Nhắn tin'} image_url={IC_CALL_BUTTON} keyName={'CallAction'}
+                               data={newContact?.phone}/>
                 <ImageLine source={IC_LINE_DOWN}/>
                 <TouchableOpacity onPress={onDelete}>
                     <TextDelete>
@@ -299,8 +222,8 @@ const ListButtonAction = styled.View`
   flex-direction: row;
   justify-content: space-between;
   padding-bottom: 10px;
-  padding-left: 40px;
-  padding-right: 40px;
+  padding-left: 30px;
+  padding-right: 30px;
 `
 const WrappedInformation = styled.View`
 `
@@ -309,9 +232,6 @@ const TextOptions = styled.Text`
   letter-spacing: -0.41px;
   color: #333333;
   padding-bottom: 5px;
-`
-const TextMessage = styled(TextOptions)`
-  padding-top: 15px;
 `
 const TextNote = styled(TextOptions)`
   padding-top: 15px;
@@ -333,4 +253,3 @@ const ImageLine = styled.Image`
   width: 100%;
   height: 2px;
 `
-

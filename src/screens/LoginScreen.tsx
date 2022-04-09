@@ -11,6 +11,7 @@ export const LoginScreen = memo(function HomeScreen() {
     const onNavigateContactScreen = useCallback(()=>{
         navigation.navigate("ContactScreen")
     },[navigation])
+
     return (
         <Container>
             <StatusBar
@@ -54,6 +55,7 @@ export const LoginScreen = memo(function HomeScreen() {
         </Container>
     )
 })
+
 const width = Dimensions.get("window").width
 const Container = styled.View`
   padding-top: ${getStatusBarHeight() + 60}px;

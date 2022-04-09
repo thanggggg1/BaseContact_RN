@@ -12,6 +12,7 @@ const CustomDrawer = props => {
     const ButtonHandler = useCallback(() => {
         setIsActive(!isActive)
     }, [isActive])
+
     const DropdownItem = () => {
         return (
             <View>
@@ -23,6 +24,7 @@ const CustomDrawer = props => {
             </View>
         )
     }
+
     return (
         <Container>
             <HeaderDrawer>
@@ -64,7 +66,9 @@ const CustomDrawer = props => {
         </Container>
     );
 };
+
 export default CustomDrawer;
+
 const Container = styled.View`
   flex: 1;
   margin-top: -10px;

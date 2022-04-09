@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {memo, useCallback, useMemo, useState} from 'react';
-import {KeyboardAvoidingView, Platform, TouchableOpacity} from 'react-native';
+import {KeyboardAvoidingView, Platform, TouchableOpacity,StyleSheet} from 'react-native';
 import styled from "styled-components/native";
 import {IC_PROFILE, IC_SEARCH} from "../assets";
 import {useContacts} from "../store/redux";
@@ -11,11 +11,22 @@ import {useDrawerStatus} from "@react-navigation/drawer";
 import {nonAccentVietnamese} from "../utils/nonAccentVietnamese";
 import {RawContact} from "../utils/type";
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+
+const BarSection = memo((props:any)=>{
+    return(
+        <BarTitle>
+            <Background/>
+            <TextTitle>{props.section.title}</TextTitle>
+        </BarTitle>
+    )
+})
 const Item = memo((props:any)=>{
     const navigation:any=useNavigation();
+
     const onPress = useCallback(()=>{
         navigation.navigate("ContactDetails", {paramKey: props.item.key})
     },[])
+
   return(
       <TouchableOpacity onPress={onPress}>
               <ItemList>
@@ -26,14 +37,16 @@ const Item = memo((props:any)=>{
                   <PhoneItem>{props.item.phone[props.item.phone.length - 1]}</PhoneItem>
               </TextItem>
               </ItemList>
-              </TouchableOpacity>
+      </TouchableOpacity>
   )
 })
+
 export const ContactScreen = memo(function Contact() {
     const newContact = useContacts();
     const isDrawer = useDrawerStatus();
     const [search, setSearch] = useState('')
     const [filteredList, setFilteredList] = useState([])
+
     const searchFilter = useCallback((str:string)=>{
         const text = nonAccentVietnamese(str)
         if (text) {
@@ -47,26 +60,8 @@ export const ContactScreen = memo(function Contact() {
             setFilteredList(Object.values(newContact.byKey));
             setSearch(str)
         }
-    },[])
-
-    const indexLetterStyle = useMemo(() => {
-        return isDrawer === "closed" ? {
-            color: '#f2a54a',
-            fontSize: 12,
-            letterSpacing: 5,
-        } : {
-            color: '#C4C4C4',
-            fontSize: 12,
-            letterSpacing: 5,
-        }
-    }, [isDrawer])
-    const indexContainerStyle = () => {
-        return {
-            marginRight: 10
-        }
-    }
+    },[newContact?.byKey])
     return (
-
             <Container>
                 <SearchWrap>
                     <SearchIcon source={IC_SEARCH}/>
@@ -80,16 +75,13 @@ export const ContactScreen = memo(function Contact() {
                 <ContentContainer>
                         <AlphabetList
                             data={search ? filteredList : Object.values(newContact.byKey)}
-                            indexContainerStyle={indexContainerStyle()}
-                            indexLetterStyle={indexLetterStyle}
+                            indexContainerStyle={styles.indexContainerStyle}
+                            indexLetterStyle={isDrawer === "closed" ? styles.indexLetterStyleDrawer : styles.indexLetterStyle}
                             renderCustomItem={(item) => (
                                 <Item item={item}/>
                             )}
                             renderCustomSectionHeader={(section) => (
-                                <BarTitle>
-                                    <Background/>
-                                    <TextTitle>{section.title}</TextTitle>
-                                </BarTitle>
+                                <BarSection section={section}/>
                             )}
                         />
                 </ContentContainer>
@@ -97,6 +89,22 @@ export const ContactScreen = memo(function Contact() {
             </Container>
     )
 })
+
+const styles = StyleSheet.create({
+    indexLetterStyleDrawer: {
+        color: '#f2a54a',
+        fontSize: 12,
+        letterSpacing: 5,
+    },
+    indexLetterStyle: {
+        color: '#C4C4C4',
+        fontSize: 12,
+        letterSpacing: 5,
+    },
+    indexContainerStyle :{
+        marginRight: 10
+    }
+});
 
 const Container = styled.ScrollView`
   display: flex;
@@ -112,7 +120,7 @@ const SearchWrap = styled.View`
   align-items: center;
   flex-direction: row;
   padding-right: 10px;
-  margin-bottom: -50px;
+  margin-bottom: -45px;
   margin-right: 20px;
 `
 const SearchIcon = styled.Image`
@@ -134,7 +142,6 @@ const ItemList = styled.View`
   padding-top: 10px;
   margin-left: 20px;
   flex-direction: row;
-  margin-bottom: -5px;
   margin-top: 5px;
 `
 const TextItem = styled.View`
@@ -160,6 +167,7 @@ const AvatarItem = styled(FastImage)`
   border-radius: 25px;
 `
 const BarTitle = styled.View`
+  margin-top: -5px;
   justify-content: center;
   height: 40px;
   background-color: white;

@@ -10,5 +10,7 @@ export interface RawContact {
     email:string[],
     address:string[],
     date:any,
+    actionLog:string,
     historyLog:string,
+    totalAction:number
 }

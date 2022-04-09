@@ -1,27 +1,31 @@
 import * as React from 'react';
-import {memo, useCallback, useEffect, useState} from 'react';
+import {memo, useEffect, useState} from 'react';
 
-import {FlatList, SafeAreaView, View} from 'react-native';
+import {FlatList} from 'react-native';
 import styled from "styled-components/native";
-import {IC_EMAIL, IC_INFO_ICON, IC_LINE, IC_SMALL_CALL} from "../assets";
+import {IC_EMAIL, IC_INFO_ICON, IC_SMALL_CALL} from "../assets";
 import 'react-native-gesture-handler';
 import {useContacts} from "../store/redux";
 import {RawContact} from "../utils/type";
-import { useIsFocused } from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 
-const Item = ({firstname,lastname, phone, status,action}) => (
+const Item = ({firstname, lastname, phone, action, time, totalAction}) => (
     <SectionList>
+        <CallIcon>
+            <CallIconImage
+                source={action == 'CallAction' ? IC_SMALL_CALL : IC_EMAIL}
+            />
+        </CallIcon>
         <ItemList>
             <InfoPart>
-                <CallIcon>
-                    <CallIconImage
-                        source={ action =='CallAction' ? IC_SMALL_CALL : IC_EMAIL}
-                    />
-                </CallIcon>
                 <TextItem>
-                    <NameItem>
-                        {firstname} {lastname}
-                    </NameItem>
+                    {totalAction == 1 ?
+                        <NameItem>
+                            {firstname} {lastname}
+                        </NameItem> :
+                        <NameItem>
+                            {firstname} {lastname} ({totalAction})
+                        </NameItem>}
                     <PhoneItem>
                         {phone}
                     </PhoneItem>
@@ -30,7 +34,7 @@ const Item = ({firstname,lastname, phone, status,action}) => (
             <StatusPart>
                 <StatusItem>
                     <TextStatusItem>
-                        {status}
+                        {time}
                     </TextStatusItem>
                 </StatusItem>
                 <InfoIcon>
@@ -38,52 +42,54 @@ const Item = ({firstname,lastname, phone, status,action}) => (
                 </InfoIcon>
             </StatusPart>
         </ItemList>
-        <View>
-            <LineIconImage source={IC_LINE}/>
-        </View>
     </SectionList>
 )
 export const HistoryScreen = memo(function History() {
     const isFocused = useIsFocused();
-    const [historyList,setHistoryList]=useState([])
+    const [historyList, setHistoryList] = useState([])
     const newContacts = useContacts();
-    useEffect(()=>{
+
+    useEffect(() => {
         const newData: RawContact[] = Object.values(newContacts.byKey)
-        const data=newData.filter(item => {
-            return item.historyLog!='';
+        const data = newData.filter(item => {
+            return item.historyLog != '';
         })
         setHistoryList(data)
-    },[isFocused])
+    }, [isFocused])
+
     const renderItem = ({item}) => (
         <Item
             firstname={item.firstname}
             lastname={item.lastname}
-            phone={item.phone[item.phone.length-1]}
-            status={'Hôm nay'}
-            action={item.historyLog}
+            phone={item.phone[item.phone.length - 1]}
+            action={item.actionLog}
+            time={item.historyLog}
+            totalAction={item.totalAction}
         />
     )
+
     return (
         <Container>
             <FlatList
-                    data={historyList}
-                    renderItem={renderItem}
-                    keyExtractor={item => item.key}
-                />
+                data={historyList}
+                renderItem={renderItem}
+                keyExtractor={item => item.key}
+            />
         </Container>
     )
 })
+
 const Container = styled.View`
   flex: 1;
   background-color: #ffffff;
   padding-top: 25px;
 `
 const SectionList = styled.TouchableOpacity`
+  flex-direction: row;
   margin-bottom: 10px;
   margin-left: 20px;
 `
 const InfoPart = styled.View`
-  flex-direction: row;
 `
 const StatusPart = styled.View`
   flex-direction: row;
@@ -92,13 +98,16 @@ const StatusPart = styled.View`
   padding-right: 15px;
 `
 const ItemList = styled.View`
+  flex: auto;
   flex-direction: row;
   justify-content: space-between;
+  border-bottom-width: 1px;
+  border-bottom-color: rgba(0, 0, 0, 0.1);
 `
 const TextItem = styled.View`
 `
 const NameItem = styled.Text`
-  font-weight: 500;
+  font-weight: bold;
   font-size: 16px;
   letter-spacing: 0.12px;
   color: #333333;
@@ -109,9 +118,9 @@ const PhoneItem = styled.Text`
   letter-spacing: 0.12px;
   color: #828282;
   padding-bottom: 10px;
+  padding-left: 3px;
 `
 const StatusItem = styled.View`
-
 `
 const TextStatusItem = styled.Text`
   font-size: 13px;
@@ -126,11 +135,6 @@ const CallIcon = styled.TouchableOpacity`
 const CallIconImage = styled.Image`
   width: 20px;
   height: 20px;
-`
-const LineIconImage = styled.Image`
-  height: 2px;
-  width: 100%;
-  margin-left: 30px;
 `
 const InfoIcon = styled.TouchableOpacity`
 `

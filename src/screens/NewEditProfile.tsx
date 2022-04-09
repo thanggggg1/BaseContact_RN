@@ -21,16 +21,6 @@ export const NewEditProfile = memo(function NewEditProfile() {
     const [profileUri, setProfileUri] = useState("");
     const [isActive, setIsActive] = useState(false);
     const [isValidEmail, setIsValidEmail] = useState(true);
-    const selectionOnchange = useMemo(() => {
-        return {
-            color: isActive ? '#828282' : '#F2A54A'
-        }
-    }, [isActive])
-    const selectionOnDone = useMemo(() => {
-        return {
-            color: isActive ? '#F2A54A' : '#828282'
-        }
-    }, [isActive])
     const [params, setParams] = useState({
         key: `${new Date().getTime()}`,
         value: '',
@@ -43,7 +33,9 @@ export const NewEditProfile = memo(function NewEditProfile() {
         email: [],
         address: [],
         date: '',
-        historyLog:''
+        historyLog:'',
+        actionLog:'',
+        totalAction:0
     })
     useEffect(() => {
         setIsValidEmail(true)
@@ -58,6 +50,7 @@ export const NewEditProfile = memo(function NewEditProfile() {
             setIsActive(false)
         } else setIsActive(true)
     }, [params])
+
     useEffect(() => {
         if (!itemEditContact) {
             return
@@ -66,9 +59,23 @@ export const NewEditProfile = memo(function NewEditProfile() {
     }, [itemEditContact]);
     const SearchText = `${params.firstname}${params.lastname}${nonAccentVietnamese(params.firstname)}${nonAccentVietnamese(params.lastname)}`
     const ValueText = `${nonAccentVietnamese(params.lastname)}${nonAccentVietnamese(params.firstname)}`
+
+    const selectionOnchange = useMemo(() => {
+        return {
+            color: isActive ? '#828282' : '#F2A54A'
+        }
+    }, [isActive])
+
+    const selectionOnDone = useMemo(() => {
+        return {
+            color: isActive ? '#F2A54A' : '#828282'
+        }
+    }, [isActive])
+
     const onGoBack = useCallback(() => {
         navigation.goBack()
     }, [])
+
     const onDone = useCallback(async () => {
         params.searchField = SearchText;
         params.value=ValueText;
@@ -84,6 +91,7 @@ export const NewEditProfile = memo(function NewEditProfile() {
         }
 
     }, [params]);
+
     const onButtonPress = useCallback(() => {
         ImagePicker.launchImageLibrary({
             mediaType: 'photo',
@@ -97,12 +105,14 @@ export const NewEditProfile = memo(function NewEditProfile() {
             }))
         });
     }, [])
+
     const onValueChange = useCallback((keyName: string, val: string) => {
         setParams(prevValue => ({
             ...prevValue,
             [keyName]: val
         }))
     }, [])
+
     const ProfilePictureStyle = useMemo(() => {
         return profileUri || route.params?.paramKey != 0 ? {
             width: 100,
@@ -110,11 +120,12 @@ export const NewEditProfile = memo(function NewEditProfile() {
             marginTop: -8
         } : null
     }, [profileUri || route.params?.paramKey])
+
     const updateAvatarStyle = useMemo(() => {
         return profileUri ? {top: -30} : null
     }, [profileUri])
-    return (
 
+    return (
         <Container>
             <Header>
                 <BtnHeader>

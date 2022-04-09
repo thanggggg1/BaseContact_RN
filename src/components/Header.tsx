@@ -8,6 +8,7 @@ import {getStatusBarHeight} from "react-native-iphone-x-helper";
 
 const width = Dimensions.get("window").width
 export const HeaderBase = memo(function HeaderBase() {
+
     const route = useRoute();
     const navigation: any = useNavigation();
     const openDrawer = useCallback(()=>{
@@ -16,6 +17,7 @@ export const HeaderBase = memo(function HeaderBase() {
     const onNavigateEditProfile= useCallback(()=>{
         navigation.navigate("NewEditProfile", {paramKey: 0})
     },[navigation])
+
     return (
         <Container>
             <ContentContainer>
@@ -32,6 +34,7 @@ export const HeaderBase = memo(function HeaderBase() {
         </Container>
     )
 })
+
 const BtnMenu = styled.TouchableOpacity`
   height: 18px;
   width: 22px;
