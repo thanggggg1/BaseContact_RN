@@ -7,6 +7,7 @@ import {Facetime} from 'react-native-openanything';
 import call from 'react-native-phone-call'
 import {RawContact} from "../utils/type";
 import {updateContactHistoryLog, updateContactTotalAction} from "../store/redux";
+import moment from "moment";
 
 interface Props {
     item: string,
@@ -40,11 +41,11 @@ const ItemAction = memo((props: Props) => {
                 break;
             }
         }
-    }, [])
+    }, [keyName])
 
     const onPress = useCallback(() => {
         onAction(keyName, item)
-    }, [])
+    }, [keyName,item])
     return (
         <ItemList key={index} onPress={onPress}>
             <TextAction>
@@ -64,8 +65,14 @@ interface WrapProps {
 }
 
 export const ActiveActionButton = memo(function ActiveActionButton(props: WrapProps) {
-    const {title, image_url, keyName, data,wrapData} = props;
+    const {title, image_url, keyName, data, wrapData} = props;
     const [isModalVisible, setModalVisible] = useState(false);
+
+    const getTime = useCallback(() => {
+        const hours = new Date().getHours();
+        const min = new Date().getMinutes();
+        return  `${("0" + hours).slice(-2)}:${("0" + min).slice(-2)}`;
+    }, [])
 
     const _setModalVisible = useCallback(() => {
         setModalVisible(!isModalVisible)
@@ -77,45 +84,33 @@ export const ActiveActionButton = memo(function ActiveActionButton(props: WrapPr
         await Linking.openURL(url)
     }, [])
 
-    const triggerCall = useCallback( (phoneNumber: string) => {
+    const triggerCall = useCallback((phoneNumber: string) => {
         const args = {
             number: phoneNumber,
             prompt: true,
         };
-        const hours = new Date().getHours();
-        const min = new Date().getMinutes();
-        const finalTime=hours + ':' +min
-          updateContactHistoryLog(wrapData.key,'CallAction',`${finalTime}`);
-          updateContactTotalAction(wrapData.key);
+        updateContactHistoryLog(wrapData.key, 'CallAction', `${getTime()}`);
+        updateContactTotalAction(wrapData.key);
         call(args).catch(console.error);
-    }, [])
+    }, [wrapData])
 
     const sendSMS = useCallback((item: string) => {
-        const hours = new Date().getHours();
-        const min = new Date().getMinutes();
-        const finalTime=hours + ':' +min
-        updateContactHistoryLog(wrapData.key,'MessAction',`${finalTime}`);
+        updateContactHistoryLog(wrapData.key, 'MessAction', `${getTime()}`);
         updateContactTotalAction(wrapData.key);
         onSendSMSMessage(item, `xin chao`).then()
-    }, [])
+    }, [wrapData])
 
     const sendEmail = useCallback((item: string) => {
-        const hours = new Date().getHours();
-        const min = new Date().getMinutes();
-        const finalTime=hours + ':' +min
-        updateContactHistoryLog(wrapData.key,'MessAction',`${finalTime}`);
+        updateContactHistoryLog(wrapData.key, 'MessAction', `${getTime()}`);
         updateContactTotalAction(wrapData.key);
         Linking.openURL(`mailto:${item}?subject=mailSubject&body=mailBody`);
-    }, [])
+    }, [wrapData])
 
     const faceTime = useCallback((item: string) => {
-        const hours = new Date().getHours();
-        const min = new Date().getMinutes();
-        const finalTime=hours + ':' +min
-        updateContactHistoryLog(wrapData.key,'CallAction',`${finalTime}`);
+        updateContactHistoryLog(wrapData.key, 'CallAction', `${getTime()}`);
         updateContactTotalAction(wrapData.key);
         Facetime(item)
-    }, [])
+    }, [wrapData])
 
     const onButtonAction = useCallback((keyName: string) => {
         if (data.length <= 1) {
@@ -140,11 +135,11 @@ export const ActiveActionButton = memo(function ActiveActionButton(props: WrapPr
         } else {
             setModalVisible(!isModalVisible)
         }
-    }, [isModalVisible, data])
+    }, [isModalVisible,data,keyName])
 
     const onPress = useCallback(() => {
         onButtonAction(keyName)
-    }, [])
+    }, [keyName,data])
 
     return (
         <Container>
@@ -180,6 +175,7 @@ export const ActiveActionButton = memo(function ActiveActionButton(props: WrapPr
         </Container>
     )
 })
+
 const Container = styled.View`
   flex: 1;
 `
@@ -195,7 +191,6 @@ const BackgroundButtonAction = styled.View`
   justify-content: center;
   border-radius: 25px;
 `
-
 const ImageButtonAction = styled.Image`
   tint-color: white;
 `
@@ -206,7 +201,6 @@ const TextButtonAction = styled.Text`
   color: #F2A54A;
   padding-top: 10px;
 `
-
 const SelectionList = styled.View`
   padding: 0 20px;
   width: 100%;
@@ -232,6 +226,5 @@ const TextAction = styled.Text`
   padding-bottom: 10px;
 `
 const IconAction = styled.Image`
-
 `
 

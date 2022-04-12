@@ -2,9 +2,10 @@ import * as React from 'react';
 import {createDrawerNavigator} from "@react-navigation/drawer";
 import CustomDrawer from "../components/Customdrawer";
 import BottomTabNavigator from "./TabNavigation";
+import {memo} from "react";
 
 const Drawer = createDrawerNavigator();
-const DrawerNavigator = () => {
+export const DrawerNavigator =memo(function DrawerNavigator(){
     return (
         <Drawer.Navigator
             initialRouteName="New Collection"
@@ -20,6 +21,5 @@ const DrawerNavigator = () => {
 
         </Drawer.Navigator>
     );
-}
+})
 
-export default DrawerNavigator;

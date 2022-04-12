@@ -55,7 +55,15 @@ export const HistoryScreen = memo(function History() {
         const data = newData.filter(item => {
             return item.historyLog != '';
         })
-        setHistoryList(data)
+        const sorted = data.sort((a:RawContact,b:RawContact)=> {
+            const dateA=`${a.historyLog}`.valueOf();
+            const dateB=`${b.historyLog}`.valueOf();
+            if(dateA > dateB){
+                return -1;
+            }
+            return 1
+        });
+        setHistoryList(sorted)
     }, [isFocused])
 
     const renderItem = ({item}) => (

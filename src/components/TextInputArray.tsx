@@ -17,13 +17,14 @@ const Item =memo((props:Props)=>{
     const {keyName, index,onDelete,_onInfoChange,data,title,typeKeyboard} = props
     const onInfoChange = useCallback((value)=>{
         _onInfoChange(keyName, index, value)
-    },[])
+    },[keyName,index])
+    const onPress = useCallback(()=>{
+        onDelete(keyName,index)
+    },[keyName,index])
     return(
         <ItemRemove>
             <ItemButtonAdd>
-                <RemoveButton onPress={() => {
-                    onDelete(keyName, index)
-                }}>
+                <RemoveButton onPress={onPress}>
                     <ImageRemoveButton source={IC_REMOVE}/>
                 </RemoveButton>
             </ItemButtonAdd>

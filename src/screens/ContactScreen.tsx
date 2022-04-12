@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {memo, useCallback, useMemo, useState} from 'react';
-import {KeyboardAvoidingView, Platform, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView} from 'react-native';
+import {memo, useCallback, useEffect, useState} from 'react';
+import {Keyboard, KeyboardAvoidingView, Platform, StyleSheet, TouchableOpacity} from 'react-native';
 import styled from "styled-components/native";
 import {IC_PROFILE, IC_SEARCH} from "../assets";
 import {useContacts} from "../store/redux";
@@ -10,35 +10,34 @@ import FastImage from 'react-native-fast-image'
 import {useDrawerStatus} from "@react-navigation/drawer";
 import {nonAccentVietnamese} from "../utils/nonAccentVietnamese";
 import {RawContact} from "../utils/type";
-import KeyboardSpacer from 'react-native-keyboard-spacer';
 
-const BarSection = memo((props:any)=>{
-    return(
+const BarSection = memo((props: any) => {
+    return (
         <BarTitle>
             <Background/>
             <TextTitle>{props.section.title}</TextTitle>
         </BarTitle>
     )
 })
-const Item = memo((props:any)=>{
-    const navigation:any=useNavigation();
+const Item = memo((props: any) => {
+    const navigation: any = useNavigation();
 
-    const onPress = useCallback(()=>{
+    const onPress = useCallback(() => {
         navigation.navigate("ContactDetails", {paramKey: props.item.key})
-    },[])
+    }, [navigation])
 
-  return(
-      <TouchableOpacity onPress={onPress}>
-              <ItemList>
-              <AvatarItem source={props.item.avatar == "" ? IC_PROFILE : {uri: props.item.avatar}}
-              />
-              <TextItem>
-                  <NameItem>{props.item.firstname} {props.item.lastname} </NameItem>
-                  <PhoneItem>{props.item.phone[props.item.phone.length - 1]}</PhoneItem>
-              </TextItem>
-              </ItemList>
-      </TouchableOpacity>
-  )
+    return (
+        <TouchableOpacity onPress={onPress}>
+            <ItemList>
+                <AvatarItem source={props.item.avatar == "" ? IC_PROFILE : {uri: props.item.avatar}}
+                />
+                <TextItem>
+                    <NameItem>{props.item.firstname} {props.item.lastname} </NameItem>
+                    <PhoneItem>{props.item.phone[props.item.phone.length - 1]}</PhoneItem>
+                </TextItem>
+            </ItemList>
+        </TouchableOpacity>
+    )
 })
 
 export const ContactScreen = memo(function Contact() {
@@ -46,8 +45,28 @@ export const ContactScreen = memo(function Contact() {
     const isDrawer = useDrawerStatus();
     const [search, setSearch] = useState('')
     const [filteredList, setFilteredList] = useState([])
+    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
-    const searchFilter = useCallback((str:string)=>{
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener(
+        'keyboardDidShow',
+        () => {
+            setKeyboardVisible(true); // or some other action
+        },
+    );
+        const keyboardDidHideListener = Keyboard.addListener(
+        'keyboardDidHide',
+        () => {
+            setKeyboardVisible(false); // or some other action
+        },
+    );
+        return () => {
+            keyboardDidHideListener.remove();
+            keyboardDidShowListener.remove();
+        };
+    }, []);
+
+    const searchFilter = useCallback((str: string) => {
         const text = nonAccentVietnamese(str)
         if (text) {
             const newData: RawContact[] = Object.values(newContact.byKey)
@@ -60,19 +79,22 @@ export const ContactScreen = memo(function Contact() {
             setFilteredList(Object.values(newContact.byKey));
             setSearch(str)
         }
-    },[newContact?.byKey])
+    }, [newContact?.byKey])
     return (
-            <Container>
-                <SearchWrap>
-                    <SearchIcon source={IC_SEARCH}/>
-                    <SearchBar
-                        placeholder="Tìm kiếm danh bạ"
-                        placeholderTextColor={'rgba(189, 189, 189, 0.5)'}
-                        onChangeText={searchFilter}
-                        value={search}
-                    />
-                </SearchWrap>
-                <ContentContainer>
+        <Container>
+            <SearchWrap>
+                <SearchIcon source={IC_SEARCH}/>
+                <SearchBar
+                    placeholder="Tìm kiếm danh bạ"
+                    placeholderTextColor={'rgba(189, 189, 189, 0.5)'}
+                    onChangeText={searchFilter}
+                    value={search}
+                />
+            </SearchWrap>
+            <ContentContainer>
+                <SKeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : null}
+                                      keyboardVerticalOffset={isKeyboardVisible?0:230}
+                    >
                         <AlphabetList
                             bounces={false}
                             data={search ? filteredList : Object.values(newContact.byKey)}
@@ -85,22 +107,22 @@ export const ContactScreen = memo(function Contact() {
                                 <BarSection section={section}/>
                             )}
                         />
-                    <KeyboardSpacer/>
-                </ContentContainer>
-            </Container>
+                </SKeyboardAvoidingView>
+            </ContentContainer>
+        </Container>
     )
 })
 
 const styles = StyleSheet.create({
     indexLetterStyleDrawer: {
         color: '#f2a54a',
-        fontSize: 12,
+        fontSize: 11,
     },
     indexLetterStyle: {
         color: '#C4C4C4',
-        fontSize: 12,
+        fontSize: 11,
     },
-    indexContainerStyle :{
+    indexContainerStyle: {
         marginRight: 10
     }
 });
@@ -132,9 +154,10 @@ const SearchBar = styled.TextInput`
   color: #21130d;
   flex: auto;
 `
-const ContentContainer = styled.ScrollView`
+const ContentContainer = styled.View`
   margin-top: 80px;
   padding-right: 0;
+  flex:1;
 `
 const ItemList = styled.View`
   padding-top: 10px;
@@ -184,6 +207,10 @@ const Background = styled.View`
   bottom: 0;
   left: 0;
   right: 0;
+`
+const SKeyboardAvoidingView = styled(KeyboardAvoidingView)`
+flex :1;
+  background-color: transparent;
 `
 
 

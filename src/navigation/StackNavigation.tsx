@@ -1,13 +1,13 @@
 import * as React from 'react';
 import {createStackNavigator} from "@react-navigation/stack";
-
 import {LoginScreen} from "../screens/LoginScreen";
 import {NewEditProfile} from "../screens/NewEditProfile";
-import DrawerNavigator from "./DrawerNavigator";
+import {DrawerNavigator} from "./DrawerNavigator";
 import {ContactDetails} from "../screens/ContactDetails";
+import {memo} from "react";
 
 const Stack = createStackNavigator();
-const MainStackNavigator = () => {
+export const MainStackNavigator =memo(function MainStackNavigator(){
     return (
         <Stack.Navigator initialRouteName="Home"
                          screenOptions={{
@@ -20,5 +20,5 @@ const MainStackNavigator = () => {
             <Stack.Screen name="ContactDetails" component={ContactDetails}/>
         </Stack.Navigator>
     );
-}
-export {MainStackNavigator};
+})
+

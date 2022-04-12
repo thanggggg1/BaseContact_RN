@@ -25,13 +25,13 @@ export const InputInfoDate = memo((props: CustomInputProps) => {
         setIsActive(true)
     }, [data])
 
-    const showDatePicker = () => {
+    const showDatePicker = useCallback(()=>{
         setDatePickerVisibility(true);
-    };
+    },[isDatePickerVisible])
 
-    const hideDatePicker = () => {
+    const hideDatePicker = useCallback(()=>{
         setDatePickerVisibility(false);
-    };
+    },[isDatePickerVisible])
 
     const handleConfirm = useCallback((keyName: string, val: Date) => {
         setParams(prevValue => ({
@@ -40,7 +40,7 @@ export const InputInfoDate = memo((props: CustomInputProps) => {
         }))
         hideDatePicker();
         setIsActive(!isActive)
-    }, [])
+    }, [keyName,isActive])
 
     const onDelete = useCallback(() => {
         setIsActive(!isActive)
@@ -48,7 +48,7 @@ export const InputInfoDate = memo((props: CustomInputProps) => {
 
     const onConfirmDate =useCallback((date:Date)=>{
         handleConfirm(keyName, date)
-    },[])
+    },[keyName])
 
     return (
         <Container>

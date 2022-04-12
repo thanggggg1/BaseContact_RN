@@ -74,7 +74,7 @@ export const NewEditProfile = memo(function NewEditProfile() {
 
     const onGoBack = useCallback(() => {
         navigation.goBack()
-    }, [])
+    }, [navigation])
 
     const onDone = useCallback(async () => {
         params.searchField = SearchText;
@@ -104,7 +104,7 @@ export const NewEditProfile = memo(function NewEditProfile() {
                 avatar: res.assets?.length ? res.assets[0]?.uri : ""
             }))
         });
-    }, [])
+    }, [params])
 
     const onValueChange = useCallback((keyName: string, val: string) => {
         setParams(prevValue => ({
@@ -167,13 +167,13 @@ export const NewEditProfile = memo(function NewEditProfile() {
                                        placeholder={'Công ty'}/>
                         </ContentInput>
                         <SectionAddList>
-                            <InputInfoArr title={'thêm số điện thoại'} keyName={'phone'} data={params?.phone}
+                            <InputInfoArr title={'Thêm số điện thoại'} keyName={'phone'} data={params?.phone}
                                           setParams={setParams} typeKeyboard={'number-pad'}/>
-                            <InputInfoArr title={'thêm email'} keyName={'email'} data={params?.email}
+                            <InputInfoArr title={'Thêm email'} keyName={'email'} data={params?.email}
                                           setParams={setParams} typeKeyboard={'default'}/>
-                            <InputInfoArr title={'thêm địa chỉ'} keyName={'address'} data={params?.address}
+                            <InputInfoArr title={'Thêm địa chỉ'} keyName={'address'} data={params?.address}
                                           setParams={setParams} typeKeyboard={'default'}/>
-                            <InputInfoDate title={'thêm ngày sinh'} keyName={'date'} data={params?.date}
+                            <InputInfoDate title={'Thêm ngày sinh'} keyName={'date'} data={params?.date}
                                            setParams={setParams}/>
                         </SectionAddList>
                     </SectionList>

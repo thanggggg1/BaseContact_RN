@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useCallback, useState} from 'react';
+import {memo, useCallback, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {DrawerContentScrollView,} from '@react-navigation/drawer';
 import styled from "styled-components/native";
@@ -7,24 +7,22 @@ import {IC_ADD_PLUS, IC_DOWN_ARROW, IMG_PROFILE_AVATAR} from "../assets";
 import {ItemDropDown} from "./ItemDropDown";
 import {statusBarHeight} from "../utils/styles";
 
+const DropdownItem = memo(()=>{
+    return (
+        <View>
+            <ItemDropDown title={'All'}/>
+            <ItemDropDown title={'General'}/>
+            <ItemDropDown title={'Investors'}/>
+            <ItemDropDown title={'Lead'}/>
+            <ItemDropDown title={'VIP'}/>
+        </View>
+    )
+})
 const CustomDrawer = props => {
     const [isActive, setIsActive] = useState(false);
     const ButtonHandler = useCallback(() => {
         setIsActive(!isActive)
     }, [isActive])
-
-    const DropdownItem = () => {
-        return (
-            <View>
-                <ItemDropDown title={'All'}/>
-                <ItemDropDown title={'General'}/>
-                <ItemDropDown title={'Investors'}/>
-                <ItemDropDown title={'Lead'}/>
-                <ItemDropDown title={'VIP'}/>
-            </View>
-        )
-    }
-
     return (
         <Container>
             <HeaderDrawer>

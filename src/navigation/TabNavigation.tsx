@@ -8,6 +8,7 @@ import {HeaderBase} from "../components/Header";
 import {ContactScreen} from "../screens/ContactScreen";
 import {HistoryScreen} from "../screens/HistoryScreen";
 import {bottomSpaceHeight, marginTabBar} from "../utils/styles";
+import {useNavigation} from "@react-navigation/native";
 
 const ItemSearchIcon = memo((props: any) => {
     return (
@@ -17,8 +18,8 @@ const ItemSearchIcon = memo((props: any) => {
                 source={IC_CONTACT}
                 style={[styles.tabBarIcon, props.focused && styles.tabBarIconFocused]}
             />
-            <WrapTabBarText style={[styles.tabBarText, props.focused && styles.tabBarTextFocused]}>Danh
-                bạ</WrapTabBarText>
+            <WrapTabBarText style={[styles.tabBarText, props.focused && styles.tabBarTextFocused]}>
+                Danh bạ</WrapTabBarText>
         </SearchIcon>
 
     )
@@ -37,8 +38,9 @@ const ItemHistoryIcon = memo((props: any) => {
     )
 })
 const Tab = createBottomTabNavigator();
-const BottomTabNavigator = ({navigation}) => {
 
+export const BottomTabNavigator =memo(function BottomTabNavigator(){
+    const navigation=useNavigation()
     const screenOptions = useMemo(() => {
         return {
             tabBarActiveTintColor: '#fff',
@@ -74,7 +76,7 @@ const BottomTabNavigator = ({navigation}) => {
         </Tab.Navigator>
 
     );
-};
+})
 
 const SearchIconImage = styled.Image`
   width: 18px;

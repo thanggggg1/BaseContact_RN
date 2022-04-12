@@ -16,6 +16,7 @@ interface Props {
     faceTime:(item:string)=>void,
     sendEmail:(item:string)=>void
 }
+
 const ItemAction = memo((props:Props)=>{
     const {item,index,image_url,keyName,triggerCall,sendSMS,faceTime,sendEmail}=props
     const onAction = useCallback((keyName:string,value:string)=>{
@@ -41,7 +42,7 @@ const ItemAction = memo((props:Props)=>{
 
     const onPress = useCallback(()=>{
         onAction(keyName,item)
-    },[])
+    },[keyName,item])
     return (
         <ItemList key={index} onPress={onPress}>
             <TextAction>

@@ -30,7 +30,7 @@ const CallAction = memo((props: PropsCall) => {
     const {item, index, _onCallAction} = props;
     const onCall = useCallback(() => {
         _onCallAction(item)
-    }, [])
+    }, [item])
     return (
         <TouchableOpacity key={index} onPress={onCall}>
             <PhoneInformation>{item}</PhoneInformation>
@@ -60,14 +60,14 @@ export const ContactDetails = memo(function AddedContact() {
                 },
             ]
         );
-    }, [])
+    }, [newContact])
     const onNavigateContactScreen = useCallback(() => {
         navigation.navigate("ContactScreen")
-    }, [])
+    }, [navigation])
 
     const onNavigateEditProfile = useCallback(() => {
         navigation.navigate("NewEditProfile", {paramKey: newContact.key})
-    }, [])
+    }, [navigation])
 
     const triggerCall = useCallback((phoneNumber: string) => {
         const args = {
@@ -75,7 +75,7 @@ export const ContactDetails = memo(function AddedContact() {
             prompt: true,
         };
         call(args).catch(console.error);
-    }, [])
+    }, [newContact])
 
     return (
         <Container>
