@@ -68,7 +68,7 @@ export const ContactDetails = memo(function AddedContact() {
     const onNavigateEditProfile = useCallback(() => {
         navigation.navigate("NewEditProfile", {paramKey: newContact.key})
     }, [])
-    
+
     const triggerCall = useCallback((phoneNumber: string) => {
         const args = {
             number: phoneNumber,

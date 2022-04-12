@@ -44,6 +44,7 @@ const Item = ({firstname, lastname, phone, action, time, totalAction}) => (
         </ItemList>
     </SectionList>
 )
+
 export const HistoryScreen = memo(function History() {
     const isFocused = useIsFocused();
     const [historyList, setHistoryList] = useState([])

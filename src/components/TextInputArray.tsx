@@ -97,6 +97,7 @@ export const InputInfoArr = memo((props: CustomInputProps) => {
         </Container>
     )
 })
+
 const Container = styled.View`
   flex: auto;
   background-color: #ffffff;
@@ -152,13 +153,6 @@ const TextInfo = styled.Text`
   color: #333333;
   background-color: white;
   border-bottom-color: rgba(0, 0, 0, 0.1);
-  letter-spacing: -0.41px;
-`
-const TextValidEmail = styled.Text`
-  margin-left: 15px;
-  font-size: 13px;
-  color: red;
-  background-color: white;
   letter-spacing: -0.41px;
 `
 const ImageRemoveButton = styled.Image`

@@ -3,10 +3,11 @@ import {memo, useMemo} from 'react';
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {IC_CONTACT, IC_HISTORY} from "../assets";
 import styled from "styled-components/native";
-import {Dimensions, Platform, StyleSheet, View, Text} from "react-native";
+import {StyleSheet} from "react-native";
 import {HeaderBase} from "../components/Header";
 import {ContactScreen} from "../screens/ContactScreen";
 import {HistoryScreen} from "../screens/HistoryScreen";
+import {bottomSpaceHeight, marginTabBar} from "../utils/styles";
 
 const ItemSearchIcon = memo((props: any) => {
     return (
@@ -37,19 +38,23 @@ const ItemHistoryIcon = memo((props: any) => {
 })
 const Tab = createBottomTabNavigator();
 const BottomTabNavigator = ({navigation}) => {
+
     const screenOptions = useMemo(() => {
         return {
             tabBarActiveTintColor: '#fff',
-            tabBarStyle: {backgroundColor: '#f2a54a'},
+            tabBarStyle: {backgroundColor: '#f2a54a',height:bottomSpaceHeight},
             tabBarLabelStyle: {display: 'none' as const},
             tabBarHideOnKeyboard: true,
+            shownLabel:false,
             header: props => <HeaderBase navigation={navigation} {...props}/>
         }
     }, [navigation])
+
     return (
         <Tab.Navigator
             initialRouteName="Danh bạ"
-            screenOptions={screenOptions}>
+            screenOptions={screenOptions}
+        >
             <Tab.Screen name="Danh bạ" component={ContactScreen}
                         options={{
                             tabBarIcon: ({focused}) => {
@@ -72,23 +77,21 @@ const BottomTabNavigator = ({navigation}) => {
 };
 
 const SearchIconImage = styled.Image`
-  margin-top: 10px;
   width: 18px;
   height: 20px;
   tint-color: white;
 `
 const HistoryIconImage = styled.Image`
-  margin-top: 10px;
   width: 18px;
   height: 20px;
   tint-color: #fff;
 `
 const HistoryIcon = styled.View`
-  margin-top: 5px;
+  margin-top: ${marginTabBar}px;
   align-items: center;
 `
 const SearchIcon = styled.View`
-  margin-top: 5px;
+  margin-top: ${marginTabBar}px;
   align-items: center;
 `
 const WrapTabBarText = styled.Text`
@@ -106,20 +109,18 @@ const styles = StyleSheet.create({
         height: 23,
     },
     tabBarText: {
+        marginTop:5,
         fontSize: 10,
         textAlign: 'center',
         letterSpacing: 0.12,
         color: '#FFDAAE',
-        paddingTop: 3,
-        paddingBottom: 15
     },
     tabBarTextFocused: {
+        marginTop:5,
         fontSize: 10,
         textAlign: 'center',
         letterSpacing: 0.12,
         color: '#FFFFFF',
-        paddingTop: 3,
-        paddingBottom: 15
     }
 });
 export default BottomTabNavigator;

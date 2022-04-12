@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {memo, useCallback, useMemo, useState} from 'react';
-import {KeyboardAvoidingView, Platform, TouchableOpacity,StyleSheet} from 'react-native';
+import {KeyboardAvoidingView, Platform, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView} from 'react-native';
 import styled from "styled-components/native";
 import {IC_PROFILE, IC_SEARCH} from "../assets";
 import {useContacts} from "../store/redux";
@@ -74,6 +74,7 @@ export const ContactScreen = memo(function Contact() {
                 </SearchWrap>
                 <ContentContainer>
                         <AlphabetList
+                            bounces={false}
                             data={search ? filteredList : Object.values(newContact.byKey)}
                             indexContainerStyle={styles.indexContainerStyle}
                             indexLetterStyle={isDrawer === "closed" ? styles.indexLetterStyleDrawer : styles.indexLetterStyle}
@@ -84,8 +85,8 @@ export const ContactScreen = memo(function Contact() {
                                 <BarSection section={section}/>
                             )}
                         />
+                    <KeyboardSpacer/>
                 </ContentContainer>
-                <KeyboardSpacer/>
             </Container>
     )
 })
@@ -94,20 +95,17 @@ const styles = StyleSheet.create({
     indexLetterStyleDrawer: {
         color: '#f2a54a',
         fontSize: 12,
-        letterSpacing: 5,
     },
     indexLetterStyle: {
         color: '#C4C4C4',
         fontSize: 12,
-        letterSpacing: 5,
     },
     indexContainerStyle :{
         marginRight: 10
     }
 });
 
-const Container = styled.ScrollView`
-  display: flex;
+const Container = styled.View`
   flex: 1;
   background-color: #ffffff;
 `
@@ -134,7 +132,7 @@ const SearchBar = styled.TextInput`
   color: #21130d;
   flex: auto;
 `
-const ContentContainer = styled.View`
+const ContentContainer = styled.ScrollView`
   margin-top: 80px;
   padding-right: 0;
 `
@@ -187,7 +185,5 @@ const Background = styled.View`
   left: 0;
   right: 0;
 `
-const SKeyboardAvoidingView=styled(KeyboardAvoidingView)`
-flex: 1;
-`
+
 
