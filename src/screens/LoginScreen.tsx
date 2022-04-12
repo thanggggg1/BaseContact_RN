@@ -8,9 +8,9 @@ import {getStatusBarHeight} from 'react-native-iphone-x-helper'
 
 export const LoginScreen = memo(function HomeScreen() {
     const navigation: any = useNavigation();
-    const onNavigateContactScreen = useCallback(()=>{
+    const onNavigateContactScreen = useCallback(() => {
         navigation.navigate("ContactScreen")
-    },[navigation])
+    }, [navigation])
 
     return (
         <Container>

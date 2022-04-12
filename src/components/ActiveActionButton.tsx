@@ -7,7 +7,6 @@ import {Facetime} from 'react-native-openanything';
 import call from 'react-native-phone-call'
 import {RawContact} from "../utils/type";
 import {updateContactHistoryLog, updateContactTotalAction} from "../store/redux";
-import moment from "moment";
 
 interface Props {
     item: string,
@@ -45,7 +44,7 @@ const ItemAction = memo((props: Props) => {
 
     const onPress = useCallback(() => {
         onAction(keyName, item)
-    }, [keyName,item])
+    }, [keyName, item])
     return (
         <ItemList key={index} onPress={onPress}>
             <TextAction>
@@ -71,7 +70,7 @@ export const ActiveActionButton = memo(function ActiveActionButton(props: WrapPr
     const getTime = useCallback(() => {
         const hours = new Date().getHours();
         const min = new Date().getMinutes();
-        return  `${("0" + hours).slice(-2)}:${("0" + min).slice(-2)}`;
+        return `${("0" + hours).slice(-2)}:${("0" + min).slice(-2)}`;
     }, [])
 
     const _setModalVisible = useCallback(() => {
@@ -103,7 +102,7 @@ export const ActiveActionButton = memo(function ActiveActionButton(props: WrapPr
     const sendEmail = useCallback((item: string) => {
         updateContactHistoryLog(wrapData.key, 'MessAction', `${getTime()}`);
         updateContactTotalAction(wrapData.key);
-        Linking.openURL(`mailto:${item}?subject=mailSubject&body=mailBody`);
+        Linking.openURL(`mailto:${item}?subject=mailSubject&body=mailBody`).then();
     }, [wrapData])
 
     const faceTime = useCallback((item: string) => {
@@ -135,11 +134,11 @@ export const ActiveActionButton = memo(function ActiveActionButton(props: WrapPr
         } else {
             setModalVisible(!isModalVisible)
         }
-    }, [isModalVisible,data,keyName])
+    }, [isModalVisible, data, keyName])
 
     const onPress = useCallback(() => {
         onButtonAction(keyName)
-    }, [keyName,data])
+    }, [keyName, data])
 
     return (
         <Container>

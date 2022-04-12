@@ -25,7 +25,7 @@ export const NewEditProfile = memo(function NewEditProfile() {
         key: `${new Date().getTime()}`,
         value: '',
         firstname: '',
-        lastname:'',
+        lastname: '',
         avatar: '',
         organization: '',
         searchField: '',
@@ -33,9 +33,9 @@ export const NewEditProfile = memo(function NewEditProfile() {
         email: [],
         address: [],
         date: '',
-        historyLog:'',
-        actionLog:'',
-        totalAction:0
+        historyLog: '',
+        actionLog: '',
+        totalAction: 0
     })
     useEffect(() => {
         setIsValidEmail(true)
@@ -78,7 +78,7 @@ export const NewEditProfile = memo(function NewEditProfile() {
 
     const onDone = useCallback(async () => {
         params.searchField = SearchText;
-        params.value=ValueText;
+        params.value = ValueText;
         if (params.value == "" || params.phone.includes('') || params.phone.length == 0) {
             alert('Please insert name or phone of the contact');
             return;

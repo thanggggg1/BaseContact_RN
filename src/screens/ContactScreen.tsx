@@ -49,17 +49,17 @@ export const ContactScreen = memo(function Contact() {
 
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener(
-        'keyboardDidShow',
-        () => {
-            setKeyboardVisible(true); // or some other action
-        },
-    );
+            'keyboardDidShow',
+            () => {
+                setKeyboardVisible(true); // or some other action
+            },
+        );
         const keyboardDidHideListener = Keyboard.addListener(
-        'keyboardDidHide',
-        () => {
-            setKeyboardVisible(false); // or some other action
-        },
-    );
+            'keyboardDidHide',
+            () => {
+                setKeyboardVisible(false); // or some other action
+            },
+        );
         return () => {
             keyboardDidHideListener.remove();
             keyboardDidShowListener.remove();
@@ -92,21 +92,22 @@ export const ContactScreen = memo(function Contact() {
                 />
             </SearchWrap>
             <ContentContainer>
-                <SKeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : null}
-                                      keyboardVerticalOffset={isKeyboardVisible?0:230}
-                    >
-                        <AlphabetList
-                            bounces={false}
-                            data={search ? filteredList : Object.values(newContact.byKey)}
-                            indexContainerStyle={styles.indexContainerStyle}
-                            indexLetterStyle={isDrawer === "closed" ? styles.indexLetterStyleDrawer : styles.indexLetterStyle}
-                            renderCustomItem={(item) => (
-                                <Item item={item}/>
-                            )}
-                            renderCustomSectionHeader={(section) => (
-                                <BarSection section={section}/>
-                            )}
-                        />
+                <SKeyboardAvoidingView
+                    behavior={Platform.OS === "ios" ? "padding" : null}
+                    keyboardVerticalOffset={isKeyboardVisible ? 0 : 230}
+                >
+                    <AlphabetList
+                        bounces={false}
+                        data={search ? filteredList : Object.values(newContact.byKey)}
+                        indexContainerStyle={styles.indexContainerStyle}
+                        indexLetterStyle={isDrawer === "closed" ? styles.indexLetterStyleDrawer : styles.indexLetterStyle}
+                        renderCustomItem={(item) => (
+                            <Item item={item}/>
+                        )}
+                        renderCustomSectionHeader={(section) => (
+                            <BarSection section={section}/>
+                        )}
+                    />
                 </SKeyboardAvoidingView>
             </ContentContainer>
         </Container>
@@ -157,7 +158,7 @@ const SearchBar = styled.TextInput`
 const ContentContainer = styled.View`
   margin-top: 80px;
   padding-right: 0;
-  flex:1;
+  flex: 1;
 `
 const ItemList = styled.View`
   padding-top: 10px;
@@ -209,7 +210,7 @@ const Background = styled.View`
   right: 0;
 `
 const SKeyboardAvoidingView = styled(KeyboardAvoidingView)`
-flex :1;
+  flex: 1;
   background-color: transparent;
 `
 

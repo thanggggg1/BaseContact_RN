@@ -7,7 +7,7 @@ import {ContactDetails} from "../screens/ContactDetails";
 import {memo} from "react";
 
 const Stack = createStackNavigator();
-export const MainStackNavigator =memo(function MainStackNavigator(){
+export const MainStackNavigator = memo(function MainStackNavigator() {
     return (
         <Stack.Navigator initialRouteName="Home"
                          screenOptions={{

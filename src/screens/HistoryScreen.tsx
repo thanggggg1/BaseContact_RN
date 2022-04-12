@@ -55,10 +55,10 @@ export const HistoryScreen = memo(function History() {
         const data = newData.filter(item => {
             return item.historyLog != '';
         })
-        const sorted = data.sort((a:RawContact,b:RawContact)=> {
-            const dateA=`${a.historyLog}`.valueOf();
-            const dateB=`${b.historyLog}`.valueOf();
-            if(dateA > dateB){
+        const sorted = data.sort((a: RawContact, b: RawContact) => {
+            const dateA = `${a.historyLog}`.valueOf();
+            const dateB = `${b.historyLog}`.valueOf();
+            if (dateA > dateB) {
                 return -1;
             }
             return 1

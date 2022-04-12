@@ -7,42 +7,42 @@ import {Facetime} from 'react-native-openanything';
 import call from 'react-native-phone-call'
 
 interface Props {
-    item:string,
-    index:number,
-    image_url:any,
-    keyName:string,
-    triggerCall :(item:string)=>void,
-    sendSMS : (item:string)=>void,
-    faceTime:(item:string)=>void,
-    sendEmail:(item:string)=>void
+    item: string,
+    index: number,
+    image_url: any,
+    keyName: string,
+    triggerCall: (item: string) => void,
+    sendSMS: (item: string) => void,
+    faceTime: (item: string) => void,
+    sendEmail: (item: string) => void
 }
 
-const ItemAction = memo((props:Props)=>{
-    const {item,index,image_url,keyName,triggerCall,sendSMS,faceTime,sendEmail}=props
-    const onAction = useCallback((keyName:string,value:string)=>{
-        switch (keyName){
-            case 'CallAction':{
+const ItemAction = memo((props: Props) => {
+    const {item, index, image_url, keyName, triggerCall, sendSMS, faceTime, sendEmail} = props
+    const onAction = useCallback((keyName: string, value: string) => {
+        switch (keyName) {
+            case 'CallAction': {
                 triggerCall(value)
                 break;
             }
-            case 'MessAction':{
+            case 'MessAction': {
                 sendSMS(value)
                 break;
             }
-            case 'FacetimeAction':{
+            case 'FacetimeAction': {
                 faceTime(value)
                 break;
             }
-            case 'EmailAction':{
+            case 'EmailAction': {
                 sendEmail(value)
                 break;
             }
         }
-    },[])
+    }, [])
 
-    const onPress = useCallback(()=>{
-        onAction(keyName,item)
-    },[keyName,item])
+    const onPress = useCallback(() => {
+        onAction(keyName, item)
+    }, [keyName, item])
     return (
         <ItemList key={index} onPress={onPress}>
             <TextAction>
@@ -56,17 +56,17 @@ const ItemAction = memo((props:Props)=>{
 interface WrapProps {
     title: string,
     image_url: any,
-    keyName:string,
-    data:string[],
+    keyName: string,
+    data: string[],
 }
 
 export const TextSMSAction = memo(function TextSMSAction(props: WrapProps) {
-    const {title, image_url,keyName,data} = props;
-    const [isModalVisible,setModalVisible]=useState(false)
+    const {title, image_url, keyName, data} = props;
+    const [isModalVisible, setModalVisible] = useState(false)
 
-    const _setModalVisible=useCallback(()=>{
+    const _setModalVisible = useCallback(() => {
         setModalVisible(!isModalVisible)
-    },[isModalVisible])
+    }, [isModalVisible])
 
     const onSendSMSMessage = useCallback(async (phoneNumber, message) => {
         const separator = Platform.OS === 'ios' ? '&' : '?'
@@ -94,35 +94,34 @@ export const TextSMSAction = memo(function TextSMSAction(props: WrapProps) {
         Facetime(item)
     }, [])
 
-    const onButtonAction = useCallback((keyName:string)=>{
-        if(data.length <=1) {
-            switch (keyName){
-                case 'CallAction':{
+    const onButtonAction = useCallback((keyName: string) => {
+        if (data.length <= 1) {
+            switch (keyName) {
+                case 'CallAction': {
                     triggerCall(data[0])
                     break;
                 }
-                case 'MessAction' :{
+                case 'MessAction' : {
                     sendSMS(data[0])
                     break;
                 }
-                case 'FacetimeAction' :{
+                case 'FacetimeAction' : {
                     faceTime(data[0])
                     break;
                 }
-                case 'EmailAction' :{
+                case 'EmailAction' : {
                     sendEmail(data[0])
                     break;
                 }
             }
-        }
-        else {
+        } else {
             setModalVisible(!isModalVisible)
         }
-    },[isModalVisible,data])
+    }, [isModalVisible, data])
 
-    const onPress = useCallback(()=>{
+    const onPress = useCallback(() => {
         onButtonAction(keyName)
-    },[])
+    }, [])
 
     return (
         <View>
@@ -157,27 +156,27 @@ export const TextSMSAction = memo(function TextSMSAction(props: WrapProps) {
 })
 const SelectionList = styled.View`
   padding: 0 20px;
-  width:100%;
+  width: 100%;
   height: 300px;
   background-color: white;
   border-radius: 25px;
 `
 const TextSelection = styled.Text`
-text-align: center;
+  text-align: center;
   font-size: 20px;
   color: #f2a54a;
   padding-top: 10px;
   font-weight: bold;
 `
 const ItemList = styled.TouchableOpacity`
-    flex-direction: row;
+  flex-direction: row;
   justify-content: space-between;
   border-bottom-color: rgba(0, 0, 0, 0.1);
   border-bottom-width: 1px;
   padding-top: 10px;
 `
-const TextAction=styled.Text`
-    padding-bottom: 10px;
+const TextAction = styled.Text`
+  padding-bottom: 10px;
 `
 const IconAction = styled.Image`
 `

@@ -11,12 +11,12 @@ export const HeaderBase = memo(function HeaderBase() {
 
     const route = useRoute();
     const navigation: any = useNavigation();
-    const openDrawer = useCallback(()=>{
+    const openDrawer = useCallback(() => {
         navigation.openDrawer()
-    },[navigation])
-    const onNavigateEditProfile= useCallback(()=>{
+    }, [navigation])
+    const onNavigateEditProfile = useCallback(() => {
         navigation.navigate("NewEditProfile", {paramKey: 0})
-    },[navigation])
+    }, [navigation])
 
     return (
         <Container>

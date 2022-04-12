@@ -5,9 +5,10 @@ import styled from "styled-components/native";
 
 interface Props {
     title: string,
-    image_url:any,
+    image_url: any,
 }
-export const NonActiveActionButton = memo( function NonActiveActionButton(props:Props){
+
+export const NonActiveActionButton = memo(function NonActiveActionButton(props: Props) {
     const {title, image_url} = props;
 
     return (
@@ -26,7 +27,7 @@ export const NonActiveActionButton = memo( function NonActiveActionButton(props:
 })
 
 const Container = styled.View`
-flex: 1
+  flex: 1
 `
 
 const ButtonAction = styled.TouchableOpacity`

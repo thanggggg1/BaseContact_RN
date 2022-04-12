@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {memo, useCallback, useMemo, useState} from 'react';
+import {memo, useCallback, useState} from 'react';
 import {View} from 'react-native';
 import {DrawerContentScrollView,} from '@react-navigation/drawer';
 import styled from "styled-components/native";
@@ -7,7 +7,7 @@ import {IC_ADD_PLUS, IC_DOWN_ARROW, IMG_PROFILE_AVATAR} from "../assets";
 import {ItemDropDown} from "./ItemDropDown";
 import {statusBarHeight} from "../utils/styles";
 
-const DropdownItem = memo(()=>{
+const DropdownItem = memo(() => {
     return (
         <View>
             <ItemDropDown title={'All'}/>

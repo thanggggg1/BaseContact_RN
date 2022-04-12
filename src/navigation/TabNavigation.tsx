@@ -39,15 +39,15 @@ const ItemHistoryIcon = memo((props: any) => {
 })
 const Tab = createBottomTabNavigator();
 
-export const BottomTabNavigator =memo(function BottomTabNavigator(){
-    const navigation=useNavigation()
+export const BottomTabNavigator = memo(function BottomTabNavigator() {
+    const navigation = useNavigation()
     const screenOptions = useMemo(() => {
         return {
             tabBarActiveTintColor: '#fff',
-            tabBarStyle: {backgroundColor: '#f2a54a',height:bottomSpaceHeight},
+            tabBarStyle: {backgroundColor: '#f2a54a', height: bottomSpaceHeight},
             tabBarLabelStyle: {display: 'none' as const},
             tabBarHideOnKeyboard: true,
-            shownLabel:false,
+            shownLabel: false,
             header: props => <HeaderBase navigation={navigation} {...props}/>
         }
     }, [navigation])
@@ -111,14 +111,14 @@ const styles = StyleSheet.create({
         height: 23,
     },
     tabBarText: {
-        marginTop:5,
+        marginTop: 5,
         fontSize: 10,
         textAlign: 'center',
         letterSpacing: 0.12,
         color: '#FFDAAE',
     },
     tabBarTextFocused: {
-        marginTop:5,
+        marginTop: 5,
         fontSize: 10,
         textAlign: 'center',
         letterSpacing: 0.12,

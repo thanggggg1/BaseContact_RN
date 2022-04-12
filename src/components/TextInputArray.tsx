@@ -4,24 +4,25 @@ import {TextInputProps, View} from "react-native";
 import styled from "styled-components/native";
 import {IC_ADD_GREEN_BUTTON, IC_REMOVE} from "../assets";
 
-interface Props{
-    keyName:string,
-    index:number,
-    onDelete:(keyName:string,index:number) => void,
-    _onInfoChange:(keyName:string, index:number, value:string) => void,
-    data:string[],
-    title:string,
-    typeKeyboard:any
+interface Props {
+    keyName: string,
+    index: number,
+    onDelete: (keyName: string, index: number) => void,
+    _onInfoChange: (keyName: string, index: number, value: string) => void,
+    data: string[],
+    title: string,
+    typeKeyboard: any
 }
-const Item =memo((props:Props)=>{
-    const {keyName, index,onDelete,_onInfoChange,data,title,typeKeyboard} = props
-    const onInfoChange = useCallback((value)=>{
+
+const Item = memo((props: Props) => {
+    const {keyName, index, onDelete, _onInfoChange, data, title, typeKeyboard} = props
+    const onInfoChange = useCallback((value) => {
         _onInfoChange(keyName, index, value)
-    },[keyName,index])
-    const onPress = useCallback(()=>{
-        onDelete(keyName,index)
-    },[keyName,index])
-    return(
+    }, [keyName, index])
+    const onPress = useCallback(() => {
+        onDelete(keyName, index)
+    }, [keyName, index])
+    return (
         <ItemRemove>
             <ItemButtonAdd>
                 <RemoveButton onPress={onPress}>
@@ -79,7 +80,8 @@ export const InputInfoArr = memo((props: CustomInputProps) => {
             {data.map((item, index) => {
                 return (
                     <View key={index}>
-                        <Item keyName={keyName} index={index} onDelete={onDelete} _onInfoChange={onInfoChange} data={data} title={title} typeKeyboard={typeKeyboard}/>
+                        <Item keyName={keyName} index={index} onDelete={onDelete} _onInfoChange={onInfoChange}
+                              data={data} title={title} typeKeyboard={typeKeyboard}/>
                     </View>
                 )
             })}

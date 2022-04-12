@@ -5,7 +5,7 @@ import BottomTabNavigator from "./TabNavigation";
 import {memo} from "react";
 
 const Drawer = createDrawerNavigator();
-export const DrawerNavigator =memo(function DrawerNavigator(){
+export const DrawerNavigator = memo(function DrawerNavigator() {
     return (
         <Drawer.Navigator
             initialRouteName="New Collection"
